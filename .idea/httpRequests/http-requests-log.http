@@ -1,0 +1,186 @@
+PUT http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=7hdkj3i67r4vg1iv6tie0advnr
+Accept: */*
+Cache-Control: no-cache
+
+id=1&lng=0&lat=0
+
+<> 2020-05-15T044320.404.html
+
+###
+
+PUT http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=7hdkj3i67r4vg1iv6tie0advnr
+Accept: */*
+Cache-Control: no-cache
+
+id=1&lng=0&lat=0
+
+<> 2020-05-15T044306.404.html
+
+###
+
+PUT http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=7hdkj3i67r4vg1iv6tie0advnr
+Accept: */*
+Cache-Control: no-cache
+
+id=1&lng=0&lat=0
+
+<> 2020-05-15T044222.404.html
+
+###
+
+POST http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=4jeuu5ns0pgiclanubcb3q9d0s
+Accept: */*
+Cache-Control: no-cache
+
+name=car1&id=1&route=1&intro=test
+
+<> 2020-05-15T043645.502.html
+
+###
+
+GET http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=4jeuu5ns0pgiclanubcb3q9d0s
+Accept: */*
+Cache-Control: no-cache
+
+name=car1&id=1&route=1&intro=test
+
+<> 2020-05-15T043640.200.html
+
+###
+
+POST http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=4jeuu5ns0pgiclanubcb3q9d0s
+Accept: */*
+Cache-Control: no-cache
+
+name=car1&id=1&route=1&intro=test
+
+<> 2020-05-15T043508.502.html
+
+###
+
+POST http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=4jeuu5ns0pgiclanubcb3q9d0s
+Accept: */*
+Cache-Control: no-cache
+
+name=car1&id=1&route=1&intro=test
+
+<> 2020-05-15T043504.502.html
+
+###
+
+POST http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=7hdkj3i67r4vg1iv6tie0advnr&_ijt=4jeuu5ns0pgiclanubcb3q9d0s
+Accept: */*
+Cache-Control: no-cache
+
+name=car1&id=1&route=1&intro=test
+
+<> 2020-05-15T043413.502.html
+
+###
+
+POST http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=7hdkj3i67r4vg1iv6tie0advnr&_ijt=4jeuu5ns0pgiclanubcb3q9d0s
+Accept: */*
+Cache-Control: no-cache
+
+name=car1&id=1&route=1&intro=test
+
+<> 2020-05-15T043405.502.html
+
+###
+
+POST http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=7hdkj3i67r4vg1iv6tie0advnr&_ijt=4jeuu5ns0pgiclanubcb3q9d0s
+Accept: */*
+Cache-Control: no-cache
+
+name=car1&id=1&route=1&intro=test
+
+<> 2020-05-15T043338.502.html
+
+###
+
+PUT http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=7hdkj3i67r4vg1iv6tie0advnr
+Accept: */*
+Cache-Control: no-cache
+
+id=1&lng=0&lat=0
+
+<> 2020-05-15T012343.404.html
+
+###
+
+PUT http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=7hdkj3i67r4vg1iv6tie0advnr
+Accept: */*
+Cache-Control: no-cache
+
+id=1&lng=0&lat=0
+
+<> 2020-05-15T012152.404.html
+
+###
+
+PUT http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=7hdkj3i67r4vg1iv6tie0advnr
+Accept: */*
+Cache-Control: no-cache
+
+id=1&lng=0&lat=0
+
+<> 2020-05-15T012143.404.html
+
+###
+
+PUT http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=7hdkj3i67r4vg1iv6tie0advnr
+Accept: */*
+Cache-Control: no-cache
+
+id=1&lng=0&lat=0
+
+<> 2020-05-15T011937.404.html
+
+###
+
+PUT http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=7hdkj3i67r4vg1iv6tie0advnr
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-05-15T011857.404.html
+
+###
+
+PUT http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=7hdkj3i67r4vg1iv6tie0advnr
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-05-15T011826.404.html
+
+###
+
+PUT http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=7hdkj3i67r4vg1iv6tie0advnr
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-05-15T011808.404.html
+
+###
+
+GET http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=7hdkj3i67r4vg1iv6tie0advnr
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-05-15T011805.200.html
+
+###
+
+PUT http://localhost:63342/RealTimeBusQuery/Backend/device.php?_ijt=7hdkj3i67r4vg1iv6tie0advnr
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-05-15T011801.404.html
+
+###
+
+PUT http://localhost:8080/resources
+Accept: */*
+Cache-Control: no-cache
+
+###
+
