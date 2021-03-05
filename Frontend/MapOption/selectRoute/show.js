@@ -62,9 +62,9 @@ function show(item) {
         <span class="id">所属机构: ${item.org}</span>
         <div>${intro}</div>
         <button onclick="select('${item.id}')" class="edit">选择</button>`
-    // var link = document.createElement("a")
-    // link.href = `../../Device/show/show.html?route=${item.id}`
-    // link.appendChild(card)
+        // var link = document.createElement("a")
+        // link.href = `../../Device/show/show.html?route=${item.id}`
+        // link.appendChild(card)
     document.getElementById("list").appendChild(card)
 }
 
@@ -87,6 +87,7 @@ var select = (route) => {
                     if (response.status == 200) {
                         alert("更改成功")
                         loadData()
+                        history.back()
                     } else {
                         alert(response.message)
                     }

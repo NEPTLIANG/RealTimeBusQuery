@@ -223,7 +223,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $result["devices"] = $devices;
             } else {
                 $result["status"] = 500;
-                $result["describe"] = "发生错误，无法查询定位";
+                $result["describe"] = "没有找到设备";
             }
             exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         } else {
