@@ -1,4 +1,5 @@
 onload = () => {
+    // location.reload();
     var refresh = document.getElementById("refresh")
     refresh.addEventListener("click", loadData)
     loadData()
