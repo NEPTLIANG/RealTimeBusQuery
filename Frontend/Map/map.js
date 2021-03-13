@@ -1,9 +1,3 @@
-// 自动适配到合适视野范围
-// 无参数，默认包括所有覆盖物的情况
-// map.setFitView();
-// 传入覆盖物数组，仅包括polyline和marker1的情况
-// map.setFitView(point);
-
 var map = {};
 var userId = location.search.split("=")[1];
 var routeId = "";
@@ -128,6 +122,7 @@ function handleIdentifications(response) {
                 alert(`发生错误：标识点${identification.name}位置未定义`)
                 return 1;
             }
+            //console.log(identicifation.lng);
             var pointOfidentification = new AMap.Marker({
                 content: content, // 自定义点标记覆盖物内容
                 position: new AMap.LngLat(identification.lng, identification.lat),
@@ -207,6 +202,12 @@ function handleCards(response) {
         map.setFitView(points);
     }
 }
+
+// 自动适配到合适视野范围
+// 无参数，默认包括所有覆盖物的情况
+// map.setFitView();
+// 传入覆盖物数组，仅包括polyline和marker1的情况
+// map.setFitView(point);
 
 function test() {
     // 创建两个点标记
