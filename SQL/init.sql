@@ -1,8 +1,6 @@
 CREATE DATABASE RealTimeBusQuery;  /*建库*/
 USE RealTimeBusQuery;
 
-CREATE USER bus  /*创建用户并授权*/
-    IDENTIFIED BY "amd,yes!";
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON RealTimeBusQuery.*
     TO bus;
@@ -50,9 +48,11 @@ ALTER TABLE identification
 -- alter table identification add lng double after route;
 -- alter table identification add lat double after lng;
 
+-- DROP TABLE device;
 CREATE TABLE device(  /*设备*/
     name VARCHAR(20) NOT NULL,
     id VARCHAR(20) NOT NULL,
+    status BIT NOT NULL,
     route VARCHAR(20),
     lng DOUBLE,  /*经度*/
     lat DOUBLE,  /*纬度*/

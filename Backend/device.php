@@ -19,8 +19,6 @@ class Device
         switch ($name) {
             case "id":
                 $pattern = "[a-zA-Z0-9_-]{2,21}";
-                echo "1";
-                var_dump(preg_grep($pattern, $value));
                 if (preg_match($pattern, $value)) {
                     $this->id = $value;
                 }
@@ -38,8 +36,6 @@ class Device
     function __construct($name, $id, $route)
     {
         $pattern = "/^[a-zA-Z0-9_\-]{1,20}$/";
-        //echo $id;
-        //var_dump(preg_match($pattern, $route));
         if (preg_match($pattern, $id) !== 0 && preg_match($pattern, $route) !== 0 && $name !== "") {
             $this->name = $name;
             $this->id = $id;
@@ -48,9 +44,10 @@ class Device
     }
 }
 
+include_once('conf/conf.php');
 session_start();
 
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: *");   //记得关闭跨域
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 
 switch ($_SERVER['REQUEST_METHOD']) {
@@ -62,15 +59,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $intro = isset($intro) ? $intro : "暂无说明";
         if (isset($name) && isset($id) && isset($route)) {
             $dev = new Device($name, $id, $route);
-            //var_dump($dev);
         } else {
             $result["status"] = 400;
             $result["message"] = "不合法的值";
             exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         }
         if (isset($dev)) {
-            //var_dump(isset($dev));
-            @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+            @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
                 $result["status"] = 500;
                 $result["message"] = "无法连接到数据库，请稍后重试";
@@ -110,14 +105,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case "PUT":
         $pattern = "/^[a-zA-Z0-9_\-]{1,20}$/";
         parse_str(file_get_contents('php://input'), $data);
-        if (isset($data["id"]) && isset($data["lng"]) && isset($data["lat"])) {
-            echo "fuck";
+        if (isset($data["id"]) && isset($data["lng"]) && isset($data["lat"])) {  //上传定位
             $id = trim($data["id"]);
             $lng = doubleval(trim($data["lng"]));  //经度
             $lat = doubleval(trim($data["lat"]));  //纬度
             if (preg_match($pattern, $id) !== 0
-                && ($lng >= 0 && $lng <= 180) && ($lat >= 0 && $lat <= 90)) {  //上传定位
-                @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+                && ($lng >= 0 && $lng <= 180) && ($lat >= 0 && $lat <= 90)) {
+                @$db = new mysqli("127.0.0.1", "root", $dbPwd);
                 if (mysqli_connect_errno()) {
                     $response['status'] = 500;
                     $response['message'] = "无法连接到数据库，请稍后重试";
@@ -131,7 +125,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $stmt->bind_param("sdds", $id, $lng, $lat, $id);
                 $stmt->execute();
                 if ($stmt->affected_rows > 0) {
-                    //echo $lng . "," . $lat . "\n";
                     $response['status'] = 200;
                     $response['describe'] = "OK";
                 } else {
@@ -141,17 +134,18 @@ switch ($_SERVER['REQUEST_METHOD']) {
             } else {
                 $response['code'] = 400;
                 $response['message'] = "不合法的值";
+                exit(json_encode($response, JSON_UNESCAPED_UNICODE));
             }
         } else if (isset($data['id']) && isset($data['name'])
-            && isset($data['route']) && isset($data['intro'])) {
+            && isset($data['route']) && isset($data['intro'])) {  //修改信息
             $id     = trim($data['id']);
             $name   = trim($data['name']);
             $route  = trim($data['route']);
             $intro  = trim($data['intro']);
-            $intro = $intro ? $intro : "暂无说明";
+            $intro  = $intro ? $intro : "暂无说明";
             if ($name && preg_match($pattern, $id) !== 0
-                && preg_match($pattern, $route) && $intro) {  //修改信息
-                @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+                && preg_match($pattern, $route) && $intro) {
+                @$db = new mysqli("127.0.0.1", "root", $dbPwd);
                 if (mysqli_connect_errno()) {
                     $response['status'] = 500;
                     $response['message'] = "无法连接到数据库，请稍后重试";
@@ -165,7 +159,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $stmt->bind_param("sssss", $id, $name, $route, $intro, $id);
                 $stmt->execute();
                 if ($stmt->affected_rows > 0) {
-                    //echo $lng . "," . $lat . "\n";
                     $response['status'] = 200;
                     $response['describe'] = "OK";
                 } else {
@@ -175,19 +168,56 @@ switch ($_SERVER['REQUEST_METHOD']) {
             } else {
                 $response['code'] = 400;
                 $response['message'] = "不合法的值";
+                exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+            }
+        } else if (isset($data["id"]) && isset($data["status"])) {  //设置状态
+            $id = trim($data["id"]);
+            $status = intval(trim($data["status"]));
+            if (preg_match($pattern, $id) !== 0
+                && ($status === 1 || $status === 0)) {
+                @$db = new mysqli("127.0.0.1", "root", $dbPwd);
+                if (mysqli_connect_errno()) {
+                    $response['status'] = 500;
+                    $response['message'] = "无法连接到数据库，请稍后重试";
+                    exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+                }
+                $db->select_db("RealTimeBusQuery");
+                $query = "UPDATE device "
+                    . "SET status=? "
+                    . "WHERE id=?";
+                $stmt = $db->prepare($query);
+                $stmt->bind_param("ds", $status, $id);
+                $stmt->execute();
+                if ($stmt->affected_rows > 0) {
+                    $response['status'] = 200;
+                    $response['describe'] = "OK";
+                } else {
+                    $response['status'] = 500;
+                    $response['message'] = "发生错误，设备状态未修改";
+                }
+            } else {
+                $response['code'] = 400;
+                $response['message'] = "不合法的值";
+                exit(json_encode($response, JSON_UNESCAPED_UNICODE));
             }
         } else {
             $response['code'] = 400;
             $response['message'] = "不合法的值";
+            exit(json_encode($response, JSON_UNESCAPED_UNICODE));
         }
         $db->close();
         exit(json_encode($response, JSON_UNESCAPED_UNICODE));
         break;
     case "GET":
+        if (!isset($_GET['route'])) {
+            $response['code'] = 400;
+            $response['message'] = "请先登录并选择路线";
+            exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+        }
         $route = trim($_GET["route"]);
         $pattern = "/^[a-zA-Z0-9_\-]{1,20}$/";
         if (preg_match($pattern, $route) !== 0) {
-            @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+            @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
                 $response['status'] = 500;
                 $response['message'] = "无法连接到数据库，请稍后重试";
@@ -202,7 +232,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $stmt->bind_result($id, $name, $route, $intro, $lng, $lat);
             $stmt->execute();
             $stmt->store_result();
-            //var_dump($stmt->num_rows);
             if ($stmt->num_rows > 0) {
                 $devices = [];
                 while ($stmt->fetch()) {
@@ -216,7 +245,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     ];
                     array_push($devices, json_encode($device));
                 }
-                //var_dump($devices);
                 $db->close();
                 $result["status"] = 200;
                 $result["describe"] = "OK";
@@ -240,7 +268,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $result['message'] = "不合法的值";
             exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         }
-        @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+        @$db = new mysqli("127.0.0.1", "root", $dbPwd);
         if (mysqli_connect_errno()) {
             $result['status'] = 500;
             $result['message'] = "无法连接到数据库，请稍后重试";
