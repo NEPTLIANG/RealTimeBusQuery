@@ -21,9 +21,22 @@ body {
     color: #777;
     padding: 8rem 2rem;
 }
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin: 4rem 0;
+}
 h1 {
     font-size: 2.5rem;
-    margin: 4rem 0;
+}
+a {
+    text-decoration: none;
+}
+a[id="reg"] {
+    color: #777;
+    background-color: rgba(0, 0, 0, 0) !important;
+    width: auto;
 }
 input[type="text"], input[type="password"] {
     /* width: 7rem; */
@@ -37,9 +50,11 @@ input[type="text"], input[type="password"] {
     border-width: 0 0 0 4px;
 }
 .input {
+    display: flex;
+    align-items: baseline;
     background-color: #ddd!important;
 }
-button{
+button {
     width: 100%;
     background-color: #777!important;
 }

@@ -1,12 +1,6 @@
-// 自动适配到合适视野范围
-// 无参数，默认包括所有覆盖物的情况
-// map.setFitView();
-// 传入覆盖物数组，仅包括polyline和marker1的情况
-// map.setFitView(point);
-
-var map = {}
-var userId = location.search.split("=")[1]
-var route = ""
+var map = {};
+var userId = location.search.split("=")[1];
+var routeId = "";
 var points = [];
 var cars = {};
 
@@ -58,10 +52,9 @@ function getRoute() {
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
                 if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
-                    console.log(xhr.responseText)
                     var response = JSON.parse(xhr.responseText);
                     if (response.status === 200 && response.routes.length >= 1) {
-                        route = response.routes;
+                        routeId = response.routes;
                     } else if (response.status === 200 && response.routes.length === 0) {
                         alert("没有查询到路线");
                     } else {
@@ -81,7 +74,7 @@ function getRoute() {
  * 获取标识点
  */
 function getIdentifications() {
-    var url = `http://122.51.3.35/identification.php?route=${route}`; //获取标识点
+    var url = `http://122.51.3.35/identification.php?route=${routeId}`; //获取标识点
     if (typeof XMLHttpRequest != "undefined") {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = () => {
@@ -89,34 +82,7 @@ function getIdentifications() {
                 if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
                     var response = JSON.parse(xhr.responseText);
                     if (response.status === 200 && response.identifications.length >= 1) {
-                        for (var index = 0; index < response.identifications.length; index++) {
-                            var identification = response.identifications[index];
-                            if (points[identification.id] === undefined) {
-                                var content = '<div>' +
-                                    '<div style="border-radius: 8px 8px 8px 0px;background-color: rgba(255,255,255,0.5); padding: 8px 16px;margin: 0 0 -1px 8px;width:max-content;color: #77f">' +
-                                    identification.name + '</div>' +
-                                    '<img src="../Map/img/3.png" style="width: 16px; height: 16px;margin-left: 8px;"/>' +
-                                    '<div style="width:16px; height:16px; border-radius:16px; background-color: #77f; box-shadow: 0 0 8px rgba(127,127,255,0.5);"></div>' +
-                                    '</div>';
-                                console.log(identification);
-                                if (!identification.lng || !identification.lat) {
-                                    alert(`发生错误：标识点${identification.name}位置未定义`)
-                                    return 1;
-                                }
-                                var pointOfidentification = new AMap.Marker({
-                                    content: content, // 自定义点标记覆盖物内容
-                                    position: new AMap.LngLat(identification.lng, identification.lat),
-                                    title: identification.name,
-                                    offset: new AMap.Pixel(-17, -42) // 相对于基点的偏移位置
-                                });
-                                points.push(pointOfidentification);
-                                // point[identification.id] = pointOfidentification;
-                                map.add(pointOfidentification);
-                            } else {
-                                points[identification.id].setPosition(new AMap.LngLat(identification.lng, identification.lat));
-                            }
-                            // map.setFitView(point);
-                        }
+                        handleIdentifications(response);
                     } else if (response.status === 200 && response.devices.length === 0) {
                         alert("未添加标识点");
                     } else {
@@ -132,14 +98,52 @@ function getIdentifications() {
         xhr.send(null);
     }
     map.setFitView(points);
-    console.log(points)
+}
+
+/**
+ * 处理返回的标识点
+ * @param {object} response 
+ * @returns 
+ */
+function handleIdentifications(response) {
+    for (var index = 0; index < response.identifications.length; index++) {
+        var identification = response.identifications[index];
+        if (points[identification.id] === undefined) {
+            var content = `
+                <div class="point">
+                    <div class="info">
+                        ${identification.name}
+                    </div>
+                    <img src="../Map/img/3.png" style="width: 16px; height: 16px;margin-left: 8px;"/>
+                    <div style="width:16px; height:16px; border-radius:16px; background-color: #77f; box-shadow: 0 0 8px rgba(127,127,255,0.5);"></div>
+                </div>
+            `;
+            if (!identification.lng || !identification.lat) {
+                alert(`发生错误：标识点${identification.name}位置未定义`)
+                return 1;
+            }
+            //console.log(identicifation.lng);
+            var pointOfidentification = new AMap.Marker({
+                content: content, // 自定义点标记覆盖物内容
+                position: new AMap.LngLat(identification.lng, identification.lat),
+                title: identification.name,
+                offset: new AMap.Pixel(-17, -67) // 相对于基点的偏移位置
+            });
+            points.push(pointOfidentification);
+            // point[identification.id] = pointOfidentification;
+            map.add(pointOfidentification);
+        } else {
+            points[identification.id].setPosition(new AMap.LngLat(identification.lng, identification.lat));
+        }
+        // map.setFitView(point);
+    }
 }
 
 /**
  * 获取车辆和标记点
  */
 function getCars() {
-    var url = `http://122.51.3.35/device.php?route=${route}`; //获取车辆
+    var url = `http://122.51.3.35/device.php?route=${routeId}`; //获取车辆
     if (typeof XMLHttpRequest != "undefined") {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = () => {
@@ -147,42 +151,10 @@ function getCars() {
                 if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
                     var response = JSON.parse(xhr.responseText);
                     if (response.status === 200 && response.devices.length >= 1) {
-                        for (var index = 0; index < response.devices.length; index++) {
-                            var device = JSON.parse(response.devices[index]);
-                            // var id = device.id
-                            // cars = [];
-                            if (cars[device.id] === undefined) {
-                                var content = '<div>' +
-                                    '<div style="border-radius: 8px 8px 8px 0px;background-color: rgba(255,255,255,0.5); padding: 8px 16px;margin: 0 0 -1px 8px;width:max-content;color: #77f">' +
-                                    device.name + '</div>' +
-                                    '<img src="../Map/img/3.png" style="width: 16px; height: 16px;margin-left: 8px;"/>' +
-                                    '<div style="width:16px; height:16px; border-radius:16px; background-color: #77f; box-shadow: 0 0 8px rgba(127,127,255,0.5);"></div>' +
-                                    '</div>';
-                                var car = new AMap.Marker({
-                                    content: content, // 自定义点标记覆盖物内容
-                                    position: new AMap.LngLat(device.lng, device.lat),
-                                    title: device.name,
-                                    offset: new AMap.Pixel(-17, -42) // 相对于基点的偏移位置
-                                });
-                                cars[device.id] = car;
-                                console.log(cars)
-                                map.add(car);
-                                console.log(!points.findIndex(p => car.id === p.id))
-                                points.push(car);
-                            } else {
-                                cars[device.id].setPosition(new AMap.LngLat(device.lng, device.lat));
-                                // let position = new AMap.LngLat(device.lng, device.lat);
-                                // cars[device.id].setPosition(position);
-                                console.log('running', cars);
-                            }
-                            map.setFitView(points);
-                            // console.log(points)
-                            // console.log('Car updated', device)
-                        }
+                        handleCards(response);
                     } else if (response.status === 200 && response.devices.length === 0) {
                         alert("未添加设备");
                     } else {
-                        console.log(response)
                         alert("发生错误：" + response.describe);
                         clearInterval(globalThis.interval)
                     }
@@ -196,6 +168,46 @@ function getCars() {
         xhr.send(null);
     }
 }
+
+/**
+ * 处理后端返回的定位信息
+ * @param {object} response 
+ */
+function handleCards(response) {
+    for (var index = 0; index < response.devices.length; index++) {
+        var device = JSON.parse(response.devices[index]);
+        // var id = device.id
+        // cars = [];
+        if (cars[device.id] === undefined) {
+            var content = '<div>' +
+                '<div style="border-radius: 8px 8px 8px 0px;background-color: rgba(255,255,255,0.5); padding: 8px 16px;margin: 0 0 -1px 8px;width:max-content;color: #77f">' +
+                device.name + '</div>' +
+                '<img src="../Map/img/3.png" style="width: 16px; height: 16px;margin-left: 8px;"/>' +
+                '<div style="width:16px; height:16px; border-radius:16px; background-color: #77f; box-shadow: 0 0 8px rgba(127,127,255,0.5);"></div>' +
+                '</div>';
+            var car = new AMap.Marker({
+                content: content, // 自定义点标记覆盖物内容
+                position: new AMap.LngLat(device.lng, device.lat),
+                title: device.name,
+                offset: new AMap.Pixel(-17, -42) // 相对于基点的偏移位置
+            });
+            cars[device.id] = car;
+            map.add(car);
+            points.push(car);
+        } else {
+            cars[device.id].setPosition(new AMap.LngLat(device.lng, device.lat));
+            // let position = new AMap.LngLat(device.lng, device.lat);
+            // cars[device.id].setPosition(position);
+        }
+        map.setFitView(points);
+    }
+}
+
+// 自动适配到合适视野范围
+// 无参数，默认包括所有覆盖物的情况
+// map.setFitView();
+// 传入覆盖物数组，仅包括polyline和marker1的情况
+// map.setFitView(point);
 
 function test() {
     // 创建两个点标记
