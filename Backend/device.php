@@ -224,12 +224,12 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 exit(json_encode($response, JSON_UNESCAPED_UNICODE));
             }
             $db->select_db("RealTimeBusQuery");
-            $query = "SELECT id, name, route, intro, lng, lat "
+            $query = "SELECT id, name, route, intro, lng, lat, status "
                 . "FROM device "
                 . "WHERE route=?";
             $stmt = $db->prepare($query);
             $stmt->bind_param("s", $route);
-            $stmt->bind_result($id, $name, $route, $intro, $lng, $lat);
+            $stmt->bind_result($id, $name, $route, $intro, $lng, $lat, $status);
             $stmt->execute();
             $stmt->store_result();
             if ($stmt->num_rows > 0) {
@@ -241,7 +241,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
                         "route" => $route,
                         "intro" => $intro,
                         "lng" => $lng,
-                        "lat" => $lat
+                        "lat" => $lat,
+                        'status' => $status
                     ];
                     array_push($devices, json_encode($device));
                 }

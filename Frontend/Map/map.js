@@ -12,6 +12,9 @@ onload = () => {
     globalThis.interval = setInterval(getCars, 3000);
 }
 
+/**
+ * 初始化地图
+ */
 function mapInit() {
     map = new AMap.Map('container', {
         zoom: 13, //缩放级别
@@ -114,7 +117,7 @@ function handleIdentifications(response) {
                     <div class="info">
                         ${identification.name}
                     </div>
-                    <img src="../Map/img/3.png" style="width: 16px; height: 16px;margin-left: 8px;"/>
+                    <img src="../Map/img/3.png" style="width: 8px; height: 8px;margin-left: 8px;"/>
                     <div style="width:16px; height:16px; border-radius:16px; background-color: #77f; box-shadow: 0 0 8px rgba(127,127,255,0.5);"></div>
                 </div>
             `;
@@ -127,7 +130,7 @@ function handleIdentifications(response) {
                 content: content, // 自定义点标记覆盖物内容
                 position: new AMap.LngLat(identification.lng, identification.lat),
                 title: identification.name,
-                offset: new AMap.Pixel(-17, -67) // 相对于基点的偏移位置
+                offset: new AMap.Pixel(0, -100) // 相对于基点的偏移位置
             });
             points.push(pointOfidentification);
             // point[identification.id] = pointOfidentification;
@@ -176,26 +179,35 @@ function getCars() {
 function handleCards(response) {
     for (var index = 0; index < response.devices.length; index++) {
         var device = JSON.parse(response.devices[index]);
-        // var id = device.id
-        // cars = [];
+        console.log(device)
         if (cars[device.id] === undefined) {
-            var content = '<div>' +
-                '<div style="border-radius: 8px 8px 8px 0px;background-color: rgba(255,255,255,0.5); padding: 8px 16px;margin: 0 0 -1px 8px;width:max-content;color: #77f">' +
-                device.name + '</div>' +
-                '<img src="../Map/img/3.png" style="width: 16px; height: 16px;margin-left: 8px;"/>' +
-                '<div style="width:16px; height:16px; border-radius:16px; background-color: #77f; box-shadow: 0 0 8px rgba(127,127,255,0.5);"></div>' +
-                '</div>';
+            var content = `
+                <div class="point">
+                    <div class="info">
+                        ${device.name}
+                    </div>
+                    <img src="../Map/img/3.png" style="width: 8px; height: 8px;margin-left: 8px;"/>
+                    <div style="width:16px; height:16px; border-radius:16px; background-color: #77f; box-shadow: 0 0 8px rgba(127,127,255,0.5);"></div>
+                </div>
+            `;
             var car = new AMap.Marker({
                 content: content, // 自定义点标记覆盖物内容
                 position: new AMap.LngLat(device.lng, device.lat),
                 title: device.name,
                 offset: new AMap.Pixel(-17, -42) // 相对于基点的偏移位置
             });
-            cars[device.id] = car;
-            map.add(car);
-            points.push(car);
+            if (device.status) {
+                cars[device.id] = car;
+                map.add(car);
+                points.push(car);
+            }
         } else {
-            cars[device.id].setPosition(new AMap.LngLat(device.lng, device.lat));
+            if (device.status) {
+                cars[device.id].setPosition(new AMap.LngLat(device.lng, device.lat));
+            } else {
+                map.remove(cars[device.id]);
+                // cars.remove(device.id);
+            }
             // let position = new AMap.LngLat(device.lng, device.lat);
             // cars[device.id].setPosition(position);
         }
