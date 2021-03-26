@@ -179,7 +179,6 @@ function getCars() {
 function handleCards(response) {
     for (var index = 0; index < response.devices.length; index++) {
         var device = JSON.parse(response.devices[index]);
-        console.log(device)
         if (cars[device.id] === undefined) {
             var content = `
                 <div class="point">
