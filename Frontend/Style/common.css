@@ -1,0 +1,174 @@
+* {
+    font-size: 1rem;
+    box-sizing: unset;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height: 100%;
+    /* display: flex; */
+    justify-content: center;
+    align-items: flex-end;
+    overflow: auto;
+    background-color: #eee;
+}
+
+
+/* @media screen and (min-width : 1366px) {
+
+html {
+    font-size: 16px;
+    align-items: flex-end;
+    overflow: auto;
+}
+
+
+} */
+
+body {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: #777;
+    /* padding: 4rem 0rem; */
+}
+
+a {
+    color: unset;
+}
+
+header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 12rem;
+}
+
+h1 {
+    flex: 1 0 6rem;
+    font-size: 2.5rem;
+    /* padding-left: 12rem; */
+    margin: 32px 0;
+}
+
+.action {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#add,
+#refresh,
+#identification {
+    flex: none;
+    display: inline-block;
+    text-decoration: none;
+    font-size: 16px;
+    /* line-height: 2.5rem; */
+    margin: 0.5rem 0.5rem;
+    padding: 1rem 2rem;
+    border-radius: 4rem;
+}
+
+#add {
+    color: #eee;
+    /* height: 2.5rem; */
+    background-color: #777;
+    border: 4px #777 solid;
+}
+
+#refresh,
+#identification {
+    color: #777;
+    background: none;
+    border: 4px #777 solid;
+}
+
+article {
+    /* flex: 0 1 32rem; */
+    display: flex;
+    align-items: flex-end;
+}
+
+#list {
+    display: flex;
+    align-items: stretch;
+    overflow: auto;
+    padding: 0 8rem;
+}
+
+a {
+    text-decoration: none!important;
+}
+
+a:active {
+    color: unset;
+}
+
+button {
+    cursor: pointer;
+}
+
+.card {
+    /* background-color: #ddd; */
+    flex: 0 0 8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: center;
+    /* height: 24rem; */
+    margin: 32px 16px;
+    padding: 2rem 4rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(191, 191, 191, 0.5);
+}
+
+h2 {
+    font-size: 1.5rem;
+}
+
+.id {
+    margin: 0.5rem 0 1rem 0;
+    font-size: 0.8rem;
+}
+
+.position {
+    color: #bbb;
+    font-size: 0.8rem;
+    line-height: 1.5rem;
+    margin: 1rem 0;
+}
+
+.edit,
+.switch {
+    display: block;
+    /* height: 32px; */
+}
+
+.cardOption {
+    font-size: 0.8rem;
+    width: 100%;
+    color: #bbb;
+    border: none;
+    /* padding: 16px 0; */
+    margin: 0.1rem;
+}
+
+.cardButton {
+    height: 64px;
+    width: 64px;
+    font-size: 0.8rem;
+    line-height: 64px;
+    color: #eee;
+    text-decoration: none;
+    background-color: #777;
+    margin: 1rem auto;
+    padding: 0;
+    /* margin: 1rem auto; */
+    border: none;
+    border-radius: 64px;
+}
