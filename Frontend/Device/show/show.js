@@ -26,13 +26,11 @@ function loadData() {
                             prompt.className = "card"
                             prompt.innerHTML = "<h2>暂未查询到车辆</h2>"
                             document.getElementById("list").appendChild(prompt)
-                            console.log(prompt)
                         } else {
                             document.getElementById("list").innerHTML = ""
                             var devices = response.devices
                             for (var index in devices) {
                                 show(JSON.parse(devices[index]))
-                                console.log(devices[index])
                             }
                         }
                     } else {
@@ -41,7 +39,6 @@ function loadData() {
                         prompt.className = "card"
                         prompt.innerHTML = "<h2>暂未查询到车辆</h2>"
                         document.getElementById("list").appendChild(prompt)
-                        console.log(response)
                     }
                 } else {
                     alert("响应格式错误，请稍后重试")
@@ -88,21 +85,17 @@ function switchStatus(id, status) {
     if (!confirm(`确定要${status ? '停用' : '启用'}设备吗？`)) {
         return
     }
-    console.log('id=car1&status=0' === `id=${id}&status=${status ? 0 : 1}`)
     let data = `id=${id}&status=${status ? 0 : 1}`
     fetch('http://122.51.3.35/device.php', {
         method: 'PUT',
         body: data
     }).then((response) => {
-        console.log(response)
         try {
             return response = response.json()
         } catch (e) {
-            console.log(e)
             alert("响应格式错误，请稍后重试")
         }
     }).then((response) => {
-        console.log(response)
         if (response) {
             if (response.status == 200) {
                 alert("修改成功")

@@ -206,6 +206,7 @@ function handleCards(response) {
                 cars[device.id].setPosition(new AMap.LngLat(device.lng, device.lat));
             } else {
                 map.remove(cars[device.id]);
+                delete cars[device.id];
                 // cars.remove(device.id);
             }
             // let position = new AMap.LngLat(device.lng, device.lat);
