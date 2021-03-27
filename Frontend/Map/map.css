@@ -41,6 +41,8 @@ body {
 
 .point {
     white-space: normal;
+    display: flex;
+    flex-direction: column;
 }
 
 .info {

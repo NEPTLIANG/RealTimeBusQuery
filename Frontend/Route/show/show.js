@@ -62,8 +62,8 @@ function show(item) {
     card.innerHTML = `<h2>${item.name}</h2>
         <span class="id">id: ${item.id}</span>
         <div>${intro}</div>
-        <a href='../modify/modify.html?id=${item.id}&name=${item.name}&org=${item.org}&intro=${item.intro}' class="edit">编辑</a>
-        <button onclick="del('${item.id}')" class="del">删除</button>`
+        <a href='../modify/modify.html?id=${item.id}&name=${item.name}&org=${item.org}&intro=${item.intro}' class="cardButton">编辑</a>
+        <button onclick="del('${item.id}')" class="cardOption">删除</button>`
     var link = document.createElement("a")
     link.href = `../../Device/show/show.html?route=${item.id}`
     link.appendChild(card)

@@ -144,34 +144,34 @@ switch ($_SERVER['REQUEST_METHOD']) {
             exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         }
         break;
-    case "DELETE":
-        parse_str(file_get_contents("php://input"), $delete);
-        $id = trim($delete['id']);
-        if (!preg_match($pattern, $id)) {
-            $response['status'] = 400;
-            $response['message'] = "不合法的值";
-            exit(json_encode($response, JSON_UNESCAPED_UNICODE));
-        }
-        @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
-        if (mysqli_connect_errno()) {
-            $response['status'] = 500;
-            $response['message'] = "无法连接到数据库，请稍后重试";
-            exit(json_encode($response, JSON_UNESCAPED_UNICODE));
-        }
-        $db->select_db("RealTimeBusQuery");
-        $query = "DELETE FROM user "
-            . "WHERE id=?";
-        $stmt = $db->prepare($query);
-        $stmt->bind_param("s", $id);
-        $stmt->execute();
-        if ($stmt->affected_rows) {
-            $response['status'] = 200;
-            $response["describe"] = "OK";
-        } else {
-            $response['status'] = 500;
-            $response['message'] = "发生错误，用户未删除";
-        }
-        $db->close();
-        exit(json_encode($response, JSON_UNESCAPED_UNICODE));
-        break;
+    // case "DELETE":   //暂不支持注销用户
+    //     parse_str(file_get_contents("php://input"), $delete);
+    //     $id = trim($delete['id']);
+    //     if (!preg_match($pattern, $id)) {
+    //         $response['status'] = 400;
+    //         $response['message'] = "不合法的值";
+    //         exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+    //     }
+    //     @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+    //     if (mysqli_connect_errno()) {
+    //         $response['status'] = 500;
+    //         $response['message'] = "无法连接到数据库，请稍后重试";
+    //         exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+    //     }
+    //     $db->select_db("RealTimeBusQuery");
+    //     $query = "DELETE FROM user "
+    //         . "WHERE id=?";
+    //     $stmt = $db->prepare($query);
+    //     $stmt->bind_param("s", $id);
+    //     $stmt->execute();
+    //     if ($stmt->affected_rows) {
+    //         $response['status'] = 200;
+    //         $response["describe"] = "OK";
+    //     } else {
+    //         $response['status'] = 500;
+    //         $response['message'] = "发生错误，用户未删除";
+    //     }
+    //     $db->close();
+    //     exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+    //     break;
 }
