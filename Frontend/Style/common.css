@@ -1,28 +1,30 @@
-/* * {
+* {
+    font-size: 1rem;
+    box-sizing: unset;
     margin: 0;
     padding: 0;
-} */
+}
 
 html {
-    overflow: hidden;
     height: 100%;
-    font-size: 48px;
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     align-items: flex-end;
+    overflow: auto;
     background-color: #eee;
 }
 
 
-/* @media screen and (min-width : 1366px) { */
+/* @media screen and (min-width : 1366px) {
 
 html {
     font-size: 16px;
-    align-items: center;
+    align-items: flex-end;
+    overflow: auto;
 }
 
 
-/* } */
+} */
 
 body {
     width: 100%;
@@ -34,60 +36,62 @@ body {
     /* padding: 4rem 0rem; */
 }
 
+a {
+    color: unset;
+}
+
 header {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    align-items: stretch;
+    align-items: center;
+    padding: 0 12rem;
+}
+
+h1 {
+    flex: 1 0 6rem;
+    font-size: 2.5rem;
+    /* padding-left: 12rem; */
+    margin: 32px 0;
 }
 
 .action {
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
 }
 
-h1 {
-    font-size: 2.5rem;
-    padding-left: 12rem;
+#add,
+#refresh,
+#identification {
+    flex: none;
+    display: inline-block;
+    text-decoration: none;
+    font-size: 16px;
+    /* line-height: 2.5rem; */
+    margin: 0.5rem 0.5rem;
+    padding: 1rem 2rem;
+    border-radius: 4rem;
 }
 
 #add {
-    display: inline-block;
-    height: 2.5rem;
-    text-decoration: none;
-    font-size: 1.25rem;
-    line-height: 2.5rem;
     color: #eee;
+    /* height: 2.5rem; */
     background-color: #777;
-    /* margin: 1rem auto;
-    padding: 0; */
-    /* margin: 1rem auto; */
-    margin: 0 8rem 0 2rem;
-    padding: 0.5rem 2rem;
-    border: none;
-    border-radius: 4rem;
+    border: 4px #777 solid;
 }
 
-#refresh {
-    display: inline-block;
-    /* height: 2.5rem; */
-    text-decoration: none;
-    font-size: 1.25rem;
-    line-height: 2.5rem;
+#refresh,
+#identification {
     color: #777;
     background: none;
-    /* margin: 1rem auto;
-    padding: 0; */
-    /* margin: 1rem auto; */
-    margin: 0 2rem;
-    padding: 0.5rem 2rem;
     border: 4px #777 solid;
-    border-radius: 4rem;
 }
 
-
-/* article {
-    flex: 0 1 32rem;
-} */
+article {
+    /* flex: 0 1 32rem; */
+    display: flex;
+    align-items: flex-end;
+}
 
 #list {
     display: flex;
@@ -96,9 +100,20 @@ h1 {
     padding: 0 8rem;
 }
 
+a {
+    text-decoration: none!important;
+}
+
+a:active {
+    color: unset;
+}
+
+button {
+    cursor: pointer;
+}
+
 .card {
     /* background-color: #ddd; */
-    color: #777;
     flex: 0 0 8rem;
     display: flex;
     flex-direction: column;
@@ -106,16 +121,10 @@ h1 {
     align-items: center;
     text-align: center;
     /* height: 24rem; */
-    margin: 64px 16px;
+    margin: 32px 16px;
     padding: 2rem 4rem;
     border-radius: 16px;
     box-shadow: 0 4px 16px rgba(191, 191, 191, 0.5);
-}
-
-#list>a {
-    text-decoration: none!important;
-    /* display: flex; */
-    /* align-items: flex-end; */
 }
 
 h2 {
@@ -134,21 +143,22 @@ h2 {
     margin: 1rem 0;
 }
 
-.del,
-.edit {
+.edit,
+.switch {
     display: block;
     /* height: 32px; */
 }
 
-.del {
+.cardOption {
     font-size: 0.8rem;
     width: 100%;
     color: #bbb;
     border: none;
     /* padding: 16px 0; */
+    margin: 0.1rem;
 }
 
-.edit {
+.cardButton {
     height: 64px;
     width: 64px;
     font-size: 0.8rem;
