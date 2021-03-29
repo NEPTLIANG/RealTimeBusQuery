@@ -179,6 +179,10 @@ function getCars() {
 function handleCards(response) {
     for (var index = 0; index < response.devices.length; index++) {
         var device = JSON.parse(response.devices[index]);
+        // if (!device.status) {
+        //     map.setFitView(points);
+        //     return;
+        // }
         if (cars[device.id] === undefined) {
             var content = `
                 <div class="point">
@@ -195,6 +199,7 @@ function handleCards(response) {
                 title: device.name,
                 offset: new AMap.Pixel(-17, -42) // 相对于基点的偏移位置
             });
+            console.log(car, device);
             if (device.status) {
                 cars[device.id] = car;
                 map.add(car);
@@ -206,7 +211,11 @@ function handleCards(response) {
             } else {
                 map.remove(cars[device.id]);
                 delete cars[device.id];
-                // cars.remove(device.id);
+                let pointIndex = points.findIndex(p => p.Ce.title === device.name);
+                console.log(points);
+                points.splice(pointIndex, 1);
+                console.log(pointIndex);
+                console.log(points);
             }
             // let position = new AMap.LngLat(device.lng, device.lat);
             // cars[device.id].setPosition(position);
