@@ -1,7 +1,20 @@
 <?php
-session_start();
 header("Access-Control-Allow-Origin: *");
+//header("Access-Control-Allow-Origin: localhost");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+session_start();
+
+function authentification() {
+    if (!isset($_SESSION['valid_user'])) {
+        $result["status"] = 403;
+        //$result["message"] = "请先登录";
+        //$result["message"] = "'{$_SESSION['valid_user']}'";
+        //$result["message"] = SID;
+        //$result['message'] = (session_status() === PHP_SESSION_ACTIVE);
+        $result['message'] = session_id();
+        exit(json_encode($result, JSON_UNESCAPED_UNICODE));
+    }
+}
 
 $pattern = "/^[a-zA-Z0-9_\-]{1,20}$/";
 $pwdPattern = "/^[a-fA-F0-9]{128}$/";
@@ -38,6 +51,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         break;
     case "PUT":
+        authentification();
         parse_str(file_get_contents('php://input'), $data);
         $id = trim($data["id"]);
         $route = trim($data["route"]);
@@ -99,6 +113,12 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     }
                     $result["status"] = 200;
                     $result["describe"] = "OK";
+                    $_SESSION['valid_user'] = $id;
+                    session_commit();
+                    //$result['message'] = $_SESSION['valid_user'];
+                    //$result['message'] = htmlspecialchars(SID);
+                    //$result['message'] = (session_status() === PHP_SESSION_ACTIVE);
+                    $result['message'] = session_id();
                 } else {
                     $result["status"] = 500;
                     $result["message"] = "发生错误，无法查询";
@@ -110,6 +130,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             }
             exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         } else {  //查询路线
+            authentification();
             $id = trim($_GET["id"]);
             if (preg_match($pattern, $id)) {
                 @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
@@ -144,34 +165,34 @@ switch ($_SERVER['REQUEST_METHOD']) {
             exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         }
         break;
-    // case "DELETE":   //暂不支持注销用户
-    //     parse_str(file_get_contents("php://input"), $delete);
-    //     $id = trim($delete['id']);
-    //     if (!preg_match($pattern, $id)) {
-    //         $response['status'] = 400;
-    //         $response['message'] = "不合法的值";
-    //         exit(json_encode($response, JSON_UNESCAPED_UNICODE));
-    //     }
-    //     @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
-    //     if (mysqli_connect_errno()) {
-    //         $response['status'] = 500;
-    //         $response['message'] = "无法连接到数据库，请稍后重试";
-    //         exit(json_encode($response, JSON_UNESCAPED_UNICODE));
-    //     }
-    //     $db->select_db("RealTimeBusQuery");
-    //     $query = "DELETE FROM user "
-    //         . "WHERE id=?";
-    //     $stmt = $db->prepare($query);
-    //     $stmt->bind_param("s", $id);
-    //     $stmt->execute();
-    //     if ($stmt->affected_rows) {
-    //         $response['status'] = 200;
-    //         $response["describe"] = "OK";
-    //     } else {
-    //         $response['status'] = 500;
-    //         $response['message'] = "发生错误，用户未删除";
-    //     }
-    //     $db->close();
-    //     exit(json_encode($response, JSON_UNESCAPED_UNICODE));
-    //     break;
+    /* case "DELETE":   //暂不支持注销用户
+        parse_str(file_get_contents("php://input"), $delete);
+        $id = trim($delete['id']);
+        if (!preg_match($pattern, $id)) {
+            $response['status'] = 400;
+            $response['message'] = "不合法的值";
+            exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+        }
+        @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+        if (mysqli_connect_errno()) {
+            $response['status'] = 500;
+            $response['message'] = "无法连接到数据库，请稍后重试";
+            exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+        }
+        $db->select_db("RealTimeBusQuery");
+        $query = "DELETE FROM user "
+            . "WHERE id=?";
+        $stmt = $db->prepare($query);
+        $stmt->bind_param("s", $id);
+        $stmt->execute();
+        if ($stmt->affected_rows) {
+            $response['status'] = 200;
+            $response["describe"] = "OK";
+        } else {
+            $response['status'] = 500;
+            $response['message'] = "发生错误，用户未删除";
+        }
+        $db->close();
+        exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+        break; */
 }

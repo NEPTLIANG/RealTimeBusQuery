@@ -98,8 +98,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
             mysqli_stmt_bind_param("s", $name, $id, $route, $intro);
             mysqli_stmt_execute($query);*/
         } else {
-            print("不合法的值");
-            exit;
+            $result["status"] = 400;
+            $result["message"] = "不合法的值";
+            exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         }
         break;
     case "PUT":
@@ -252,12 +253,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $result["devices"] = $devices;
             } else {
                 $result["status"] = 500;
-                $result["describe"] = "没有找到设备";
+                $result["message"] = "没有找到设备";
             }
             exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         } else {
-            print("不合法的值");
-            exit;
+            $result["status"] = 400;
+            $result["message"] = "不合法的值";
+            exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         }
         break;
     case "DELETE":
