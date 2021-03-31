@@ -1,17 +1,19 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-//header("Access-Control-Allow-Origin: localhost");
+// header("Access-Control-Allow-Origin: *");
+// if (isset($_SERVER['HTTP_ORIGIN'])) {
+//     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+// }
+// header('Access-Control-Allow-Credentials: true');
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 session_start();
 
 function authentification() {
     if (!isset($_SESSION['valid_user'])) {
         $result["status"] = 403;
-        //$result["message"] = "请先登录";
-        //$result["message"] = "'{$_SESSION['valid_user']}'";
-        //$result["message"] = SID;
+        $result["message"] = "请先登录";
         //$result['message'] = (session_status() === PHP_SESSION_ACTIVE);
-        $result['message'] = session_id();
+        //$result['message'] = session_id();
+        //$result["message"] = "'{$_SESSION['valid_user']}'";
         exit(json_encode($result, JSON_UNESCAPED_UNICODE));
     }
 }
@@ -86,8 +88,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
         if (isset($_GET['pwd'])) {  //登录验证
             $id = trim($_GET["id"]);
             $pwd = trim($_GET["pwd"]);
-            //echo $id . "<br/>" . $pwd . "<br/>";
-            //echo "<br/>" . preg_match($pwdPattern, $pwd);
             if (preg_match($pattern, $id) && preg_match($pwdPattern, $pwd)) {
                 @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
                 if (mysqli_connect_errno()) {
@@ -115,9 +115,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     $result["describe"] = "OK";
                     $_SESSION['valid_user'] = $id;
                     session_commit();
-                    //$result['message'] = $_SESSION['valid_user'];
-                    //$result['message'] = htmlspecialchars(SID);
                     //$result['message'] = (session_status() === PHP_SESSION_ACTIVE);
+                    //$result['message'] = $_SESSION['valid_user'];
                     $result['message'] = session_id();
                 } else {
                     $result["status"] = 500;

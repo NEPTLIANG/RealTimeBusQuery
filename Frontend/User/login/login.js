@@ -2,18 +2,10 @@
  * @Author: NeptLiang
  * @Date: 2021-03-05 13:46:26
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-03-30 16:29:24
+ * @LastEditTime: 2021-03-31 11:49:56
  * @Description: 用户登录
  */
 onload = () => {
-    // var cryptoScript = document.createElement("script")
-    // cryptoScript.src = "../Lib/sha512.js"
-    // document.body.appendChild(cryptoScript)
-    // document.write("<script src=\"../Lib/sha512.js\"></script>")
-    // console.log(cryptoScript)
-    // strlen($name) <= 20 && (preg_match($pattern, $id) !== 0)
-    // && preg_match($pwdPattern, $pwd) && strlen($route) <=20
-    // $pwdPattern = "/^[a-fA-F0-9]{128}$/";
     var addBtn = document.getElementById("add");
     addBtn.addEventListener("click", function() {
         var id = document.getElementById("id").value;
@@ -32,7 +24,7 @@ onload = () => {
                         }
                         if (typeof(response) !== "undefined") {
                             if (response.status === 200) {
-                                // location = `../../Map/map.html?id=${id}`
+                                location = `../../Map/map.html?id=${id}`
                             } else {
                                 alert(response.message);
                             }
