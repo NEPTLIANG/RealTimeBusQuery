@@ -1,12 +1,16 @@
 <?php
-// header("Access-Control-Allow-Origin: *");
+include('conf/conf.php');
+session_start();
+// header("Access-Control-Allow-Origin: *");   //线上环境记得关闭跨域
 // if (isset($_SERVER['HTTP_ORIGIN'])) {
 //     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
 // }
 // header('Access-Control-Allow-Credentials: true');
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
-session_start();
 
+/**
+ * 鉴权
+ */
 function authentification() {
     if (!isset($_SESSION['valid_user'])) {
         $result["status"] = 403;
@@ -26,7 +30,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $id = trim($_POST['id']);
         $pwd = trim($_POST['pwd']);
         if (strlen($name) <= 20 && (preg_match($pattern, $id) !== 0) && preg_match($pwdPattern, $pwd)) {
-            @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+            @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
                 $result["status"] = 500;
                 $result["message"] = "无法连接到数据库，请稍后重试";
@@ -58,7 +62,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $id = trim($data["id"]);
         $route = trim($data["route"]);
         if ((preg_match($pattern, $id) !== 0) && isset($route)) {  //用户添加路线
-            @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+            @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
                 exit("无法连接到数据库，请稍后重试");
             }
@@ -89,7 +93,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $id = trim($_GET["id"]);
             $pwd = trim($_GET["pwd"]);
             if (preg_match($pattern, $id) && preg_match($pwdPattern, $pwd)) {
-                @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+                @$db = new mysqli("127.0.0.1", "root", $dbPwd);
                 if (mysqli_connect_errno()) {
                     $response['status'] = 500;
                     $response['message'] = "无法连接到数据库，请稍后重试";
@@ -172,7 +176,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $response['message'] = "不合法的值";
             exit(json_encode($response, JSON_UNESCAPED_UNICODE));
         }
-        @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+        @$db = new mysqli("127.0.0.1", "root", $dbPwd);
         if (mysqli_connect_errno()) {
             $response['status'] = 500;
             $response['message'] = "无法连接到数据库，请稍后重试";

@@ -1,11 +1,24 @@
 <?php
 session_start();
+include('conf/conf.php');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, PUT, DELETE");
+
+/**
+ * 鉴权
+ */
+function authentification() {
+    if (!isset($_SESSION['valid_org'])) {
+        $result["status"] = 403;
+        $result["message"] = "请先登录";
+        exit(json_encode($result, JSON_UNESCAPED_UNICODE));
+    }
+}
 
 $pattern = "/[a-zA-Z0-9_-]{2,21}/";
 switch ($_SERVER['REQUEST_METHOD']) {
     case "POST":
+        authentification();
         $name   = trim($_POST['name']);
         $id     = trim($_POST['id']);
         $route  = trim($_POST['route']);
@@ -19,7 +32,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $result["message"] = "不合法的值";
             exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         }
-        @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+        @$db = new mysqli("127.0.0.1", "root", $dbPwd);
         if (mysqli_connect_errno()) {
             $result["status"] = 500;
             $result["message"] = "无法连接到数据库，请稍后重试";
@@ -47,7 +60,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $result['status'] = 400;
             $result['message'] = "不合法的值";
         }
-        @$db = new mysqli("127.0.0.1", "root", "amd,yes!");  //这里应该用本地ip而非localhost，否则报错
+        @$db = new mysqli("127.0.0.1", "root", $dbPwd);  //这里应该用本地ip而非localhost，否则报错
         if (mysqli_connect_errno()) {
             $result['status'] = 500;
             $result['message'] = "无法连接到数据库，请稍后重试";
@@ -86,6 +99,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         break;
     case "PUT":
+        authentification();
         parse_str(file_get_contents('php://input'), $data);
         $id     = trim($data['id']);
         $name   = trim($data['name']);
@@ -93,14 +107,14 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $lng    = doubleval(trim($_POST['lng']));
         $lat    = doubleval(trim($_POST['lat']));
         $intro  = trim($data['intro']);
-//        $intro = $intro ? $intro : "暂无简介";
+        // $intro = $intro ? $intro : "暂无简介";
         if (strlen($name) > 20 || !preg_match($pattern, $id) || !preg_match($pattern, $route)
             || $lng < 0 || $lng > 180 || $lat < 0 || $lat >180 || strlen($intro) > 128) {
             $result['status'] = "400";
             $result['message'] = "不合法的值";
             exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         }
-        @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+        @$db = new mysqli("127.0.0.1", "root", $dbPwd);
         if (mysqli_connect_errno()) {
             $result['status'] = 500;
             $result['message'] = "无法连接到数据库，请稍后重试";
@@ -124,6 +138,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         break;
     case "DELETE":
+        authentification();
         parse_str(file_get_contents("php://input"), $data);
         $id = trim($data['id']);
         if (!preg_match($pattern, $id)) {
@@ -131,7 +146,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $result['message'] = "不合法的值";
             exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         }
-        @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+        @$db = new mysqli("127.0.0.1", "root", $dbPwd);
         if (mysqli_connect_errno()) {
             $result['status'] = 500;
             $result['message'] = "无法连接到数据库，请稍后重试";

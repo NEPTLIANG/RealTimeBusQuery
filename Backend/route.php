@@ -1,11 +1,24 @@
 <?php
 session_start();
-header("Access-Control-Allow-Origin: *");
+include('conf/conf.php');
+// header("Access-Control-Allow-Origin: *");   //线上环境记得去掉跨域
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+
+/**
+ * 鉴权
+ */
+function authentification() {
+    if (!isset($_SESSION['valid_org'])) {
+        $result["status"] = 403;
+        $result["message"] = "请先登录";
+        exit(json_encode($result, JSON_UNESCAPED_UNICODE));
+    }
+}
 
 $pattern = "/^[a-zA-Z0-9_\-]{1,20}$/";
 switch ($_SERVER['REQUEST_METHOD']) {
     case "POST" :
+        authentification();
         $name = trim($_POST['name']);
         $id = trim($_POST['id']);
         $org = trim($_POST['org']);
@@ -13,7 +26,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $intro = isset($intro) ? $intro : "暂无说明";
         if ((preg_match($pattern, $id) !== 0) && (preg_match($pattern, $org) !== 0) && isset($name)) {
             //var_dump(isset($dev));
-            @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+            @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
                 $result["status"] = 500;
                 $result["message"] = "无法连接到数据库，请稍后重试";
@@ -40,13 +53,14 @@ switch ($_SERVER['REQUEST_METHOD']) {
         exit(json_encode($result));
         break;
     case "PUT":
+        authentification();
         parse_str(file_get_contents('php://input'), $data);
         $id = trim($data["id"]);
         $name = trim($data["name"]);
         $org = trim($data["org"]);
         $intro = trim($data["intro"]);
         if ((preg_match($pattern, $id) !== 0) && (preg_match($pattern, $org) !== 0) && isset($name)) {
-            @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+            @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
                 exit("无法连接到数据库，请稍后重试");
             }
@@ -76,7 +90,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         if (isset($_GET["org"])) {
             $org = trim($_GET["org"]);
             if (preg_match($pattern, $org) !== 0) {
-                @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+                @$db = new mysqli("127.0.0.1", "root", $dbPwd);
                 if (mysqli_connect_errno()) {
                     exit("无法连接到数据库，请稍后重试");
                 }
@@ -148,6 +162,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         }
         break;
     case "DELETE":
+        authentification();
         parse_str(file_get_contents("php://input"), $delete);
         $id = trim($delete['id']);
         if (!preg_match($pattern, $id)) {
@@ -155,7 +170,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $response['message'] = "不合法的值";
             exit(json_encode($response, JSON_UNESCAPED_UNICODE));
         }
-        @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+        @$db = new mysqli("127.0.0.1", "root", $dbPwd);
         if (mysqli_connect_errno()) {
             $response['status'] = 500;
             $response['message'] = "无法连接到数据库，请稍后重试";

@@ -47,11 +47,23 @@ class Device
 include_once('conf/conf.php');
 session_start();
 
-header("Access-Control-Allow-Origin: *");   //记得关闭跨域
+header("Access-Control-Allow-Origin: *");   //线上环境记得关闭跨域
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+
+/**
+ * 鉴权
+ */
+function authentification() {
+    if (!isset($_SESSION['valid_org'])) {
+        $result["status"] = 403;
+        $result["message"] = "请先登录";
+        exit(json_encode($result, JSON_UNESCAPED_UNICODE));
+    }
+}
 
 switch ($_SERVER['REQUEST_METHOD']) {
     case "POST" :
+        authentification();
         $name = trim($_POST['name']);
         $id = trim($_POST['id']);
         $route = trim($_POST['route']);
@@ -104,6 +116,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         }
         break;
     case "PUT":
+        authentification();
         $pattern = "/^[a-zA-Z0-9_\-]{1,20}$/";
         parse_str(file_get_contents('php://input'), $data);
         if (isset($data["id"]) && isset($data["lng"]) && isset($data["lat"])) {  //上传定位
@@ -263,6 +276,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         }
         break;
     case "DELETE":
+        authentification();
         parse_str(file_get_contents("php://input"), $data);
         $id = trim($data['id']);
         $pattern = "/^[a-zA-Z0-9_\-]{1,20}$/";
