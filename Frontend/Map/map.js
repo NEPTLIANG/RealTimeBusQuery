@@ -55,13 +55,15 @@ function getRoute() {
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
                 if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
+                    console.log(xhr.responseText)
                     var response = JSON.parse(xhr.responseText);
                     if (response.status === 200 && response.routes.length >= 1) {
                         routeId = response.routes;
                     } else if (response.status === 200 && response.routes.length === 0) {
                         alert("没有查询到路线");
                     } else {
-                        alert("发生错误：" + response.describe);
+                        alert("发生错误：" + response.message);
+                        throw new SyntaxError("发生错误：" + response.message);
                     }
                 } else {
                     alert("请求失败：" + xhr.status);
@@ -125,7 +127,6 @@ function handleIdentifications(response) {
                 alert(`发生错误：标识点${identification.name}位置未定义`)
                 return 1;
             }
-            //console.log(identicifation.lng);
             var pointOfidentification = new AMap.Marker({
                 content: content, // 自定义点标记覆盖物内容
                 position: new AMap.LngLat(identification.lng, identification.lat),
@@ -158,7 +159,7 @@ function getCars() {
                     } else if (response.status === 200 && response.devices.length === 0) {
                         alert("未添加设备");
                     } else {
-                        alert("发生错误：" + response.describe);
+                        alert("发生错误：" + response.message);
                         clearInterval(globalThis.interval)
                     }
                     // car1.setPosition(new AMap.LngLat(response.lng, response.lat));
@@ -179,6 +180,10 @@ function getCars() {
 function handleCards(response) {
     for (var index = 0; index < response.devices.length; index++) {
         var device = JSON.parse(response.devices[index]);
+        // if (!device.status) {
+        //     map.setFitView(points);
+        //     return;
+        // }
         if (cars[device.id] === undefined) {
             var content = `
                 <div class="point">
@@ -206,7 +211,8 @@ function handleCards(response) {
             } else {
                 map.remove(cars[device.id]);
                 delete cars[device.id];
-                // cars.remove(device.id);
+                let pointIndex = points.findIndex(p => p.Ce.title === device.name);
+                points.splice(pointIndex, 1);
             }
             // let position = new AMap.LngLat(device.lng, device.lat);
             // cars[device.id].setPosition(position);
