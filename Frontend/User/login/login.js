@@ -1,14 +1,13 @@
+/*
+ * @Author: NeptLiang
+ * @Date: 2021-03-05 13:46:26
+ * @LastEditors: NeptLiang
+ * @LastEditTime: 2021-03-31 11:49:56
+ * @Description: 用户登录
+ */
 onload = () => {
-    // var cryptoScript = document.createElement("script")
-    // cryptoScript.src = "../Lib/sha512.js"
-    // document.body.appendChild(cryptoScript)
-    // document.write("<script src=\"../Lib/sha512.js\"></script>")
-    // console.log(cryptoScript)
-    // strlen($name) <= 20 && (preg_match($pattern, $id) !== 0)
-    // && preg_match($pwdPattern, $pwd) && strlen($route) <=20
-    // $pwdPattern = "/^[a-fA-F0-9]{128}$/";
     var addBtn = document.getElementById("add");
-    addBtn.addEventListener("click", function () {
+    addBtn.addEventListener("click", function() {
         var id = document.getElementById("id").value;
         var pwd = CryptoJS.SHA512(document.getElementById("pwd").value).toString();
         var url = "http://122.51.3.35/user.php?" + "id=" + id + "&pwd=" + pwd;
@@ -23,7 +22,7 @@ onload = () => {
                         } catch (e) {
                             alert("没有响应");
                         }
-                        if (typeof (response) !== "undefined") {
+                        if (typeof(response) !== "undefined") {
                             if (response.status === 200) {
                                 location = `../../Map/map.html?id=${id}`
                             } else {
@@ -37,6 +36,7 @@ onload = () => {
             }
             xhr.open("GET", url, true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            // xhr.withCredentials = true;
             xhr.send(null);
         }
     })

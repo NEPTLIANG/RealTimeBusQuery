@@ -1,7 +1,26 @@
 <?php
+include('conf/conf.php');
 session_start();
-header("Access-Control-Allow-Origin: *");
+// header("Access-Control-Allow-Origin: *");   //线上环境记得关闭跨域
+// if (isset($_SERVER['HTTP_ORIGIN'])) {
+//     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+// }
+// header('Access-Control-Allow-Credentials: true');
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+
+/**
+ * 鉴权
+ */
+function authentification() {
+    if (!isset($_SESSION['valid_user'])) {
+        $result["status"] = 403;
+        $result["message"] = "请先登录";
+        //$result['message'] = (session_status() === PHP_SESSION_ACTIVE);
+        //$result['message'] = session_id();
+        //$result["message"] = "'{$_SESSION['valid_user']}'";
+        exit(json_encode($result, JSON_UNESCAPED_UNICODE));
+    }
+}
 
 $pattern = "/^[a-zA-Z0-9_\-]{1,20}$/";
 $pwdPattern = "/^[a-fA-F0-9]{128}$/";
@@ -11,7 +30,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $id = trim($_POST['id']);
         $pwd = trim($_POST['pwd']);
         if (strlen($name) <= 20 && (preg_match($pattern, $id) !== 0) && preg_match($pwdPattern, $pwd)) {
-            @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+            @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
                 $result["status"] = 500;
                 $result["message"] = "无法连接到数据库，请稍后重试";
@@ -38,11 +57,12 @@ switch ($_SERVER['REQUEST_METHOD']) {
         exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         break;
     case "PUT":
+        authentification();
         parse_str(file_get_contents('php://input'), $data);
         $id = trim($data["id"]);
         $route = trim($data["route"]);
         if ((preg_match($pattern, $id) !== 0) && isset($route)) {  //用户添加路线
-            @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+            @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
                 exit("无法连接到数据库，请稍后重试");
             }
@@ -72,10 +92,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
         if (isset($_GET['pwd'])) {  //登录验证
             $id = trim($_GET["id"]);
             $pwd = trim($_GET["pwd"]);
-            //echo $id . "<br/>" . $pwd . "<br/>";
-            //echo "<br/>" . preg_match($pwdPattern, $pwd);
             if (preg_match($pattern, $id) && preg_match($pwdPattern, $pwd)) {
-                @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
+                @$db = new mysqli("127.0.0.1", "root", $dbPwd);
                 if (mysqli_connect_errno()) {
                     $response['status'] = 500;
                     $response['message'] = "无法连接到数据库，请稍后重试";
@@ -99,6 +117,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     }
                     $result["status"] = 200;
                     $result["describe"] = "OK";
+                    $_SESSION['valid_user'] = $id;
+                    session_commit();
+                    //$result['message'] = (session_status() === PHP_SESSION_ACTIVE);
+                    //$result['message'] = $_SESSION['valid_user'];
+                    $result['message'] = session_id();
                 } else {
                     $result["status"] = 500;
                     $result["message"] = "发生错误，无法查询";
@@ -110,6 +133,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             }
             exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         } else {  //查询路线
+            authentification();
             $id = trim($_GET["id"]);
             if (preg_match($pattern, $id)) {
                 @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
@@ -144,34 +168,34 @@ switch ($_SERVER['REQUEST_METHOD']) {
             exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         }
         break;
-    // case "DELETE":   //暂不支持注销用户
-    //     parse_str(file_get_contents("php://input"), $delete);
-    //     $id = trim($delete['id']);
-    //     if (!preg_match($pattern, $id)) {
-    //         $response['status'] = 400;
-    //         $response['message'] = "不合法的值";
-    //         exit(json_encode($response, JSON_UNESCAPED_UNICODE));
-    //     }
-    //     @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
-    //     if (mysqli_connect_errno()) {
-    //         $response['status'] = 500;
-    //         $response['message'] = "无法连接到数据库，请稍后重试";
-    //         exit(json_encode($response, JSON_UNESCAPED_UNICODE));
-    //     }
-    //     $db->select_db("RealTimeBusQuery");
-    //     $query = "DELETE FROM user "
-    //         . "WHERE id=?";
-    //     $stmt = $db->prepare($query);
-    //     $stmt->bind_param("s", $id);
-    //     $stmt->execute();
-    //     if ($stmt->affected_rows) {
-    //         $response['status'] = 200;
-    //         $response["describe"] = "OK";
-    //     } else {
-    //         $response['status'] = 500;
-    //         $response['message'] = "发生错误，用户未删除";
-    //     }
-    //     $db->close();
-    //     exit(json_encode($response, JSON_UNESCAPED_UNICODE));
-    //     break;
+    /* case "DELETE":   //暂不支持注销用户
+        parse_str(file_get_contents("php://input"), $delete);
+        $id = trim($delete['id']);
+        if (!preg_match($pattern, $id)) {
+            $response['status'] = 400;
+            $response['message'] = "不合法的值";
+            exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+        }
+        @$db = new mysqli("127.0.0.1", "root", $dbPwd);
+        if (mysqli_connect_errno()) {
+            $response['status'] = 500;
+            $response['message'] = "无法连接到数据库，请稍后重试";
+            exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+        }
+        $db->select_db("RealTimeBusQuery");
+        $query = "DELETE FROM user "
+            . "WHERE id=?";
+        $stmt = $db->prepare($query);
+        $stmt->bind_param("s", $id);
+        $stmt->execute();
+        if ($stmt->affected_rows) {
+            $response['status'] = 200;
+            $response["describe"] = "OK";
+        } else {
+            $response['status'] = 500;
+            $response['message'] = "发生错误，用户未删除";
+        }
+        $db->close();
+        exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+        break; */
 }

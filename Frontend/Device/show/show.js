@@ -70,7 +70,7 @@ function show(item) {
         <button onclick="switchStatus('${item.id}', '${status}')" class="cardButton" 
             style="background-color: ${status ? '#f77' : '#777'};
             color: ${status? '#fff' : '#eee'};
-            line-height: unset;
+            line-height: 1.25em;
         ">
             ${status? '点击<br/>停用' : '点击<br/>启用'}
         </button>
