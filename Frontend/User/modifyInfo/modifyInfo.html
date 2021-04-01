@@ -1,0 +1,48 @@
+<!--
+ * @Author: NeptLiang
+ * @Date: 2021-04-01 09:30:59
+ * @LastEditors: NeptLiang
+ * @LastEditTime: 2021-04-01 09:57:28
+ * @Description: file content
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>实时公交</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,
+            minimun-scale=1.0, maximun-scale=1.0, user-scalable=no" />
+    <script src="../../Lib/sha512.js"></script>
+    <script src="modifyInfo.js"></script>
+
+    <link href="modifyInfo.css" rel="stylesheet" />
+</head>
+
+<body>
+
+    <h1>修改个人信息及密码</h1>
+    <!-- <div class="input">
+        <span class="left">ID</span><input type="text" id="id" placeholder="请输入用户ID" />
+    </div> -->
+    <div class="input">
+        <span class="left">用户名</span><input type="text" id="name" placeholder="请输入用户名" />
+    </div>
+    <span class="left">修改密码</span><input type="checkbox" id="changePwd" placeholder="请输入密码" />
+    <div id="pwdBox" style="display: none;">
+        <div class="input">
+            <span class="left">旧密码</span><input type="password" id="oldPwd" placeholder="请输入密码" />
+        </div>
+        <div class="input">
+            <span class="left">新密码</span><input type="password" id="newPwd" placeholder="请输入密码" />
+        </div>
+        <div class="input">
+            <span class="left">确认密码</span><input type="password" id="confirmPwd" placeholder="请输入密码" />
+        </div>
+    </div>
+
+    <button id="modify">修改</button>
+
+</body>
+
+</html>
