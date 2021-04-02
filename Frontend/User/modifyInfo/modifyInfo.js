@@ -2,24 +2,35 @@
  * @Author: NeptLiang
  * @Date: 2021-04-01 09:30:59
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-04-01 14:39:54
+ * @LastEditTime: 2021-04-02 13:52:16
  * @Description: 修改信息/密码
  */
+//TODO: 注销待完成
 onload = () => {
     var name = document.getElementById("name").value; //用户名
     let changePwdCheckBox = document.getElementById('changePwd');
     let pwdBox = document.getElementById('pwdBox');
+    pwdBox.style.display = e.target.checked ? 'block' : 'none';
     changePwdCheckBox.addEventListener('click', (e) => {
         pwdBox.style.display = e.target.checked ? 'block' : 'none';
     })
     var modifyBtn = document.getElementById("modify");
-    let changePwd = changePwdCheckBox.checked;
     modifyBtn.addEventListener("click", function() {
-        if (changePwd) {
+        if (!name) {
+            alert('用户名不能为空');
+            return;
+        }
+        if (changePwdCheckBox.checked) {
+            if (!document.getElementById("oldPwd").value ||
+                !document.getElementById("newPwd").value ||
+                !document.getElementById("confirmPwd").value) {
+                alert('请填写新旧密码');
+                return;
+            }
             var oldPwd = CryptoJS.SHA512(document.getElementById("oldPwd").value).toString();
             var newPwd = CryptoJS.SHA512(document.getElementById("newPwd").value).toString();
             var confirmPwd = CryptoJS.SHA512(document.getElementById("confirmPwd").value).toString();
-            if (oldPwd !== confirmPwd) {
+            if (newPwd !== confirmPwd) {
                 alert("两次密码不一致");
                 document.getElementById("newPwd").value = "";
                 document.getElementById("confirmPwd").value = "";
@@ -32,7 +43,7 @@ onload = () => {
                 xhr.onreadystatechange = () => {
                     if (xhr.readyState == 4) {
                         if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
-                            handleResponse(xhr)
+                            handleResponse(xhr) //TODO: 注销待完成
                         } else {
                             alert("请求失败，请稍后再试");
                         }
@@ -50,8 +61,7 @@ onload = () => {
                 response.json()
             ).then(response => {
                 if (response.status === 200) {
-                    alert("修改成功，请重新登录")
-                    location = "../login/login.html"
+                    alert("修改成功")
                 } else {
                     alert(`修改失败：${response.message}`);
                 }
@@ -76,7 +86,7 @@ function handleResponse(xhr) {
     if (typeof(response) !== "undefined") {
         if (response.status === 200) {
             alert("修改成功，请重新登录")
-            location = "../login/login.html"
+            location = "../login/login.html" //TODO: 注销待完成
         } else {
             alert(`修改失败：${response.message}`);
         }

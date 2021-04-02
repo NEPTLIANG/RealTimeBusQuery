@@ -23,10 +23,11 @@ function authentification() {
 }
 
 function getPwd($id) {
+    include('conf/conf.php');
     @$db = new mysqli("127.0.0.1", "root", $dbPwd);
     if (mysqli_connect_errno()) {
         $response['status'] = 500;
-        $response['message'] = "无法连接到数据库，请稍后重试";
+        $response['message'] = "无法连接到数据库：" . mysqli_connect_error();
         exit(json_encode($response, JSON_UNESCAPED_UNICODE));
     }
     $db->select_db("RealTimeBusQuery");
@@ -60,7 +61,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
                 $response["status"] = 500;
-                $response["message"] = "无法连接到数据库，请稍后重试";
+                $response["message"] = "无法连接到数据库：" . mysqli_connect_error();
                 exit(json_encode($response, JSON_UNESCAPED_UNICODE));
             }
             $db->select_db("RealTimeBusQuery");
@@ -97,7 +98,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
                 $response["status"] = 500;
-                $response["message"] = "无法连接到数据库，请稍后重试";
+                $response["message"] = "无法连接到数据库：" . mysqli_connect_error();
                 exit(json_encode($response, JSON_UNESCAPED_UNICODE));
             }
             $db->select_db("RealTimeBusQuery");
@@ -116,6 +117,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $response["message"] = "发生错误，未修改";
             }
             $db->close();
+            exit(json_encode($response));
         } else if (isset($put['name']) && isset($put['oldPwd']) && isset($put['newPwd'])) {     //修改密码
             $id = trim($_SESSION['valid_user']);
             $name = trim($put['name']);
@@ -124,7 +126,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $realPwd = getPwd($id);
             if ($realPwd !== $oldPwd) {
                 $response["status"] = 403;
-                $response["message"] = "密码错误";
+                $response["message"] = "旧密码错误";
                 exit(json_encode($response, JSON_UNESCAPED_UNICODE));
             }
             if (!(preg_match($pwdPattern, $newPwd) !== 0) && !isset($name)) {
@@ -135,7 +137,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
                 $response["status"] = 500;
-                $response["message"] = "无法连接到数据库，请稍后重试";
+                $response["message"] = "无法连接到数据库：" . mysqli_connect_error();
                 exit(json_encode($response, JSON_UNESCAPED_UNICODE));
             }
             $db->select_db("RealTimeBusQuery");
@@ -154,6 +156,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $response["message"] = "发生错误，未修改";
             }
             $db->close();
+            exit(json_encode($response));
         } else if (isset($put['name'])) {     //修改用户名
             $id = trim($_SESSION['valid_user']);
             $name = trim($put['name']);
@@ -165,7 +168,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
                 $response["status"] = 500;
-                $response["message"] = "无法连接到数据库，请稍后重试";
+                $response["message"] = "无法连接到数据库：" . mysqli_connect_error();
                 exit(json_encode($response, JSON_UNESCAPED_UNICODE));
             }
             $db->select_db("RealTimeBusQuery");
@@ -184,9 +187,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $response["message"] = "发生错误，未修改";
             }
             $db->close();
+            exit(json_encode($response));
         } else {    //缺少参数
             $response["status"] = 400;
             $response["message"] = "缺少请求参数";
+            exit(json_encode($response));
         }
         exit(json_encode($response));
         break;
@@ -218,7 +223,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
             if (mysqli_connect_errno()) {
                 $response['status'] = 500;
-                $response['message'] = "无法连接到数据库，请稍后重试";
+                $response['message'] = "无法连接到数据库：" . mysqli_connect_error();
                 exit(json_encode($response, JSON_UNESCAPED_UNICODE));
             }
             $db->select_db("RealTimeBusQuery");
@@ -254,7 +259,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         @$db = new mysqli("127.0.0.1", "root", $dbPwd);
         if (mysqli_connect_errno()) {
             $response['status'] = 500;
-            $response['message'] = "无法连接到数据库，请稍后重试";
+            $response['message'] = "无法连接到数据库：" . mysqli_connect_error();
             exit(json_encode($response, JSON_UNESCAPED_UNICODE));
         }
         $db->select_db("RealTimeBusQuery");
