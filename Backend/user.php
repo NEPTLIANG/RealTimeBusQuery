@@ -1,12 +1,12 @@
 <?php
-include('conf/conf.php');
 session_start();
-header("Access-Control-Allow-Origin: *");   //线上环境记得关闭跨域
+include('conf/conf.php');
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+// header("Access-Control-Allow-Origin: *");   //线上环境记得关闭跨域
 // if (isset($_SERVER['HTTP_ORIGIN'])) {
 //     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
 // }
 // header('Access-Control-Allow-Credentials: true');
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 
 /**
  * 鉴权
@@ -118,7 +118,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             }
             $db->close();
             exit(json_encode($response));
-        } else if (isset($put['name']) && isset($put['oldPwd']) && isset($put['newPwd'])) {     //修改密码
+        } else if (isset($put['name']) && isset($put['oldPwd']) && isset($put['newPwd'])) {     //修改用户名及密码
             $id = trim($_SESSION['valid_user']);
             $name = trim($put['name']);
             $oldPwd = trim($put['oldPwd']);
