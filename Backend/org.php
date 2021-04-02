@@ -82,7 +82,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
         if (isset($put['name']) && isset($put['oldPwd']) && isset($put['newPwd'])) { 
             $id = trim($_SESSION['valid_org']);
             $name = trim($put["name"]);
-            $pwd = trim($put["pwd"]);
             $oldPwd = trim($put['oldPwd']);
             $newPwd = trim($put['newPwd']);
             $intro = isset($put['intro']) ? trim($put["intro"]) : '暂无简介';
@@ -108,7 +107,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 . "SET name=?, pwd=?, intro=? "
                 . "WHERE id=?";
             $stmt = $db->prepare($query);
-            $stmt->bind_param("ssss", $name, $pwd, $intro, $id);
+            $stmt->bind_param("ssss", $name, $newPwd, $intro, $id);
             $stmt->execute();
             if ($stmt->affected_rows > 0) {
                 $result["status"] = 200;
@@ -119,7 +118,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $result["message"] = "发生错误，未修改";
             }
             $db->close();
-            exit(json_encode($result));
+            exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         } else if (isset($put['name'])) {     //修改机构名
             $id = trim($_SESSION['valid_org']);
             $name = trim($put['name']);
@@ -150,13 +149,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $response["message"] = "发生错误，未修改";
             }
             $db->close();
-            exit(json_encode($response));
+            exit(json_encode($response, JSON_UNESCAPED_UNICODE));
         } else {    //缺少参数
             $response["status"] = 400;
             $response["message"] = "缺少请求参数";
-            exit(json_encode($response));
+            exit(json_encode($response, JSON_UNESCAPED_UNICODE));
         }
-        exit(json_encode($response));
+        exit(json_encode($response, JSON_UNESCAPED_UNICODE));
         break;
     case "GET":
         $id = trim($_GET["id"]);

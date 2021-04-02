@@ -2,18 +2,18 @@
  * @Author: NeptLiang
  * @Date: 2021-04-01 09:30:59
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-04-02 14:04:04
+ * @LastEditTime: 2021-04-02 17:38:06
  * @Description: 修改信息/密码
  */
 //TODO: 注销待完成
 onload = () => {
-    var name = document.getElementById("name").value; //机构名
     let pwdBox = document.getElementById('pwdBox');
     let changePwdCheckBox = document.getElementById('changePwd');
     changePwdCheckBox.addEventListener('click', (e) => {
         pwdBox.style.display = e.target.checked ? 'block' : 'none';
     })
     document.getElementById("modify").addEventListener("click", function() {
+        var name = document.getElementById("name").value; //机构名
         if (!name) {
             alert('机构名不能为空');
             return;
@@ -34,7 +34,7 @@ onload = () => {
                 document.getElementById("confirmPwd").value = "";
                 return;
             }
-            var url = "http://122.51.3.35/user.php"
+            var url = "http://122.51.3.35/org.php"
             content = `name=${name}&oldPwd=${oldPwd}&newPwd=${newPwd}`;
             if (typeof "XMLHttpRequest" !== "undefined") {
                 var xhr = new XMLHttpRequest();
@@ -52,7 +52,7 @@ onload = () => {
                 xhr.send(content);
             }
         } else {
-            fetch('http://122.51.3.35/user.php', {
+            fetch('http://122.51.3.35/org.php', {
                 method: 'PUT',
                 body: `name=${name}`
             }).then(response =>

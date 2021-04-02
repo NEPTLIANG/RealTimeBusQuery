@@ -2,12 +2,11 @@
  * @Author: NeptLiang
  * @Date: 2021-04-01 09:30:59
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-04-02 14:02:26
+ * @LastEditTime: 2021-04-02 17:37:19
  * @Description: 修改信息/密码
  */
 //TODO: 注销待完成
 onload = () => {
-    var name = document.getElementById("name").value; //用户名
     let changePwdCheckBox = document.getElementById('changePwd');
     let pwdBox = document.getElementById('pwdBox');
     changePwdCheckBox.addEventListener('click', (e) => {
@@ -15,6 +14,7 @@ onload = () => {
     })
     var modifyBtn = document.getElementById("modify");
     modifyBtn.addEventListener("click", function() {
+        var name = document.getElementById("name").value; //用户名
         if (!name) {
             alert('用户名不能为空');
             return;

@@ -117,7 +117,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $response["message"] = "发生错误，未修改";
             }
             $db->close();
-            exit(json_encode($response));
+            exit(json_encode($response, JSON_UNESCAPED_UNICODE));
         } else if (isset($put['name']) && isset($put['oldPwd']) && isset($put['newPwd'])) {     //修改用户名及密码
             $id = trim($_SESSION['valid_user']);
             $name = trim($put['name']);
@@ -156,7 +156,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $response["message"] = "发生错误，未修改";
             }
             $db->close();
-            exit(json_encode($response));
+            exit(json_encode($response, JSON_UNESCAPED_UNICODE));
         } else if (isset($put['name'])) {     //修改用户名
             $id = trim($_SESSION['valid_user']);
             $name = trim($put['name']);
@@ -187,13 +187,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $response["message"] = "发生错误，未修改";
             }
             $db->close();
-            exit(json_encode($response));
+            exit(json_encode($response, JSON_UNESCAPED_UNICODE));
         } else {    //缺少参数
             $response["status"] = 400;
             $response["message"] = "缺少请求参数";
-            exit(json_encode($response));
+            exit(json_encode($response, JSON_UNESCAPED_UNICODE));
         }
-        exit(json_encode($response));
+        exit(json_encode($response, JSON_UNESCAPED_UNICODE));
         break;
     case "GET":
         if (isset($_GET['pwd'])) {  //登录验证
