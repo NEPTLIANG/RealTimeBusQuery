@@ -55,7 +55,7 @@ function getRoute() {
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
                 if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
-                    console.log(xhr.responseText)
+                    // console.log(xhr.responseText)
                     var response = JSON.parse(xhr.responseText);
                     if (response.status === 200 && response.routes.length >= 1) {
                         routeId = response.routes;
