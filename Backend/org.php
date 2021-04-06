@@ -14,7 +14,36 @@ function authentification() {
     }
 }
 
+function getPwd($id) {
+    include('conf/conf.php');
+    @$db = new mysqli("127.0.0.1", "root", $dbPwd);
+    if (mysqli_connect_errno()) {
+        $response['status'] = 500;
+        $response['message'] = "无法连接到数据库：" . mysqli_connect_error();
+        exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+    }
+    $db->select_db("RealTimeBusQuery");
+    $query = "SELECT pwd "
+        . "FROM org "
+        . "WHERE id=?";
+    $stmt = $db->prepare($query);
+    $stmt->bind_param("s", $id);
+    $stmt->bind_result($realPwd);
+    $stmt->execute();
+    $stmt->store_result();
+    if ($stmt->num_rows !== 1) {
+        $db->close();
+        $response["status"] = 500;
+        $response["message"] = "发生错误，无法查询";
+        exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+    }
+    $stmt->fetch();
+    $db->close();
+    return $realPwd;
+}
+
 $pattern = "/^[a-zA-Z0-9_\-]{1,20}$/";
+$pwdPattern = "/^[a-fA-F0-9]{128}$/";
 switch ($_SERVER['REQUEST_METHOD']) {
     case "POST" :
         $name = trim($_POST['name']);
@@ -49,37 +78,84 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
     case "PUT":
         authentification();
-        parse_str(file_get_contents('php://input'), $data);
-        $id = trim($data["id"]);
-        $name = trim($data["name"]);
-        $pwd = trim($data["pwd"]);
-        $intro = trim($data["intro"]);
-        if ((preg_match($pattern, $id) !== 0) && isset($pwd) && isset($name)) {
+        parse_str(file_get_contents('php://input'), $put);
+        if (isset($put['name']) && isset($put['oldPwd']) && isset($put['newPwd'])) { 
+            $id = trim($_SESSION['valid_org']);
+            $name = trim($put["name"]);
+            $oldPwd = trim($put['oldPwd']);
+            $newPwd = trim($put['newPwd']);
+            $intro = isset($put['intro']) ? trim($put["intro"]) : '暂无简介';
+            $realPwd = getPwd($id);
+            if ($realPwd !== $oldPwd) {
+                $response["status"] = 403;
+                $response["message"] = "旧密码错误";
+                exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+            }
+            if (!(preg_match($pwdPattern, $newPwd) !== 0) && !isset($name)) {
+                $response["status"] = 400;
+                $response["message"] = "不合法的值";
+                exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+            }
             @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
-                exit("无法连接到数据库，请稍后重试");
+                $response["status"] = 500;
+                $response["message"] = "无法连接到数据库：" . mysqli_connect_error();
+                exit(json_encode($response, JSON_UNESCAPED_UNICODE));
             }
             $db->select_db("RealTimeBusQuery");
             $query = "UPDATE org "
-                . "SET id=?, name=?, pwd=?, intro=? "
+                . "SET name=?, pwd=?, intro=? "
                 . "WHERE id=?";
             $stmt = $db->prepare($query);
-            $stmt->bind_param("sssss", $id, $name, $pwd, $intro, $id);
+            $stmt->bind_param("ssss", $name, $newPwd, $intro, $id);
             $stmt->execute();
             if ($stmt->affected_rows > 0) {
                 $result["status"] = 200;
                 $result["describe"] = "OK";
-                $result["message"] = "机构信息修改成功";
+                $result["message"] = "修改成功";
             } else {
                 $result["status"] = 500;
-                $result["message"] = "发生错误，机构信息未修改";
+                $result["message"] = "发生错误，未修改";
             }
             $db->close();
-        } else {
-            $result["status"] = 400;
-            $result["message"] = "不合法的值";
+            exit(json_encode($result, JSON_UNESCAPED_UNICODE));
+        } else if (isset($put['name'])) {     //修改机构名
+            $id = trim($_SESSION['valid_org']);
+            $name = trim($put['name']);
+            if (!isset($name)) {
+                $response["status"] = 400;
+                $response["message"] = "不合法的值";
+                exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+            }
+            @$db = new mysqli("127.0.0.1", "root", $dbPwd);
+            if (mysqli_connect_errno()) {
+                $response["status"] = 500;
+                $response["message"] = "无法连接到数据库：" . mysqli_connect_error();
+                exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+            }
+            $db->select_db("RealTimeBusQuery");
+            $query = "UPDATE org "
+                . "SET name=? "
+                . "WHERE id=?";
+            $stmt = $db->prepare($query);
+            $stmt->bind_param("ss", $name, $id);
+            $stmt->execute();
+            if ($stmt->affected_rows > 0) {
+                $response["status"] = 200;
+                $response["describe"] = "OK";
+                $response["message"] = "修改成功";
+            } else {
+                $response["status"] = 500;
+                $response["message"] = "发生错误，未修改";
+            }
+            $db->close();
+            exit(json_encode($response, JSON_UNESCAPED_UNICODE));
+        } else {    //缺少参数
+            $response["status"] = 400;
+            $response["message"] = "缺少请求参数";
+            exit(json_encode($response, JSON_UNESCAPED_UNICODE));
         }
-        exit(json_encode($result));
+        exit(json_encode($response, JSON_UNESCAPED_UNICODE));
         break;
     case "GET":
         $id = trim($_GET["id"]);
