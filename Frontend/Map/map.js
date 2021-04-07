@@ -62,6 +62,9 @@ function getRoute() {
                     } else if (response.status === 200 && response.routes.length === 0) {
                         alert("没有查询到路线");
                     } else {
+                        if (response.status === 403) {
+                            history.back();
+                        }
                         alert("发生错误：" + response.message);
                         throw new SyntaxError("发生错误：" + response.message);
                     }

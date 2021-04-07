@@ -2,7 +2,6 @@
     margin: 0;
     padding: 0;
 }
-
 html {
     overflow: auto;
     height: 100%;
@@ -12,29 +11,21 @@ html {
     align-items: flex-end;
     background-color: #eee;
 }
-
-
 /* @media screen and (min-width : 1366px) { */
-
 html {
     font-size: 16px;
     align-items: center;
 }
-
-
 /* } */
-
 body {
     overflow: auto;
     color: #777;
     padding: 4rem 2rem;
 }
-
 h1 {
     font-size: 2.5rem;
     margin: 4rem 0;
 }
-
 input[type="text"] {
     /* width: 7rem; */
     text-align: center;
@@ -46,19 +37,14 @@ input[type="text"] {
     border: #007f7f none;
     border-width: 0 0 0 4px;
 }
-
 .input {
     background-color: #ddd!important;
 }
-
-button {
+button{
     width: 100%;
     background-color: #777!important;
 }
-
-.result,
-.input,
-button {
+.result,.input,button {
     height: 3rem;
     text-align: center;
     font-size: 1rem;
@@ -69,14 +55,12 @@ button {
     border: 0 none;
     border-radius: 16px;
 }
-
 .left {
     color: #333;
     display: inline-block;
     width: 5rem;
     text-align: center;
 }
-
 .right {
     display: inline-block;
     /* width: 7rem; */

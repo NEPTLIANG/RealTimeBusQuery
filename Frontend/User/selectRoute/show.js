@@ -61,7 +61,7 @@ function show(item) {
     card.innerHTML = `<h2>${item.name}</h2>
         <span class="id">所属机构: ${item.org}</span>
         <div>${intro}</div>
-        <button onclick="select('${item.id}')" class="edit">选择</button>`
+        <button onclick="select('${item.id}')" class="cardButton">选择</button>`
         // var link = document.createElement("a")
         // link.href = `../../Device/show/show.html?route=${item.id}`
         // link.appendChild(card)

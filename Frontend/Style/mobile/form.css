@@ -1,41 +1,15 @@
-* {
-    margin: 0;
-    padding: 0;
-}
-
-html {
-    overflow: auto;
-    height: 100%;
-    font-size: 48px;
+@import url('./common.css');
+article {
     display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    background-color: #eee;
-}
-
-
-/* @media screen and (min-width : 1366px) { */
-
-html {
-    font-size: 16px;
-    align-items: center;
-}
-
-
-/* } */
-
-body {
+    flex-direction: column;
     overflow: auto;
-    color: #777;
-    padding: 4rem 2rem;
+    padding: 2rem;
+    /* flex: 0 1 32rem; */
+    /* align-items: flex-end; */
 }
 
-h1 {
-    font-size: 2.5rem;
-    margin: 4rem 0;
-}
-
-input[type="text"] {
+input[type="text"],
+input[type="password"] {
     /* width: 7rem; */
     text-align: center;
     font-size: 1rem;
@@ -48,10 +22,12 @@ input[type="text"] {
 }
 
 .input {
+    width: 100%;
     background-color: #ddd!important;
 }
 
-button {
+.submit {
+    padding: 1.25rem 2rem;
     width: 100%;
     background-color: #777!important;
 }
@@ -59,13 +35,13 @@ button {
 .result,
 .input,
 button {
-    height: 3rem;
+    /* height: 3rem; */
     text-align: center;
     font-size: 1rem;
     color: #ddd;
     background-color: #ddd;
     padding: 0.25rem 1rem;
-    margin: 1rem 0;
+    margin: 0.5rem 0;
     border: 0 none;
     border-radius: 16px;
 }

@@ -57,15 +57,20 @@ function loadData() {
     request.send(null)
 }
 
+/**
+ * 把标识点信息展示在页面上
+ * @param {object} item 标识点
+ */
 function show(item) {
+    console.log(item)
     var card = document.createElement("div")
     var intro = item.intro ? item.intro : "暂无说明"
     card.className = "card"
     card.innerHTML = `<h2>${item.name}</h2>
         <span class="id">id: ${item.id}</span>
         <div>${intro}</div>
-        <a href='../modify/modify.html?id=${item.id}&name=${item.name}&route=${item.route}&intro=${item.intro}' class="edit">编辑</a>
-        <button onclick="del('${item.id}')" class="del">删除</button>`
+        <a href='../modify/modify.html?id=${item.id}&name=${item.name}&route=${item.route}&lng=${item.lng}&lat=${item.lat}&intro=${item.intro}' class="cardButton">编辑</a>
+        <button onclick="del('${item.id}')" class="cardOption">删除</button>`
     document.getElementById("list").appendChild(card)
 }
 

@@ -2,7 +2,9 @@
     margin: 0;
     padding: 0;
 }
-html, body {
+
+html,
+body {
     overflow: auto;
     height: 100%;
     width: 100%;
@@ -12,56 +14,83 @@ html, body {
     align-items: flex-end;
     background-color: #eee;
 }
+
+
 /* @media screen and (min-width : 1366px) { */
+
 html {
     font-size: 16px;
     align-items: center;
 }
+
+
 /* } */
+
 .body {
     overflow: auto;
     color: #777;
-    padding: 4rem 2rem;
+    padding: 2rem 1rem;
 }
+
 h1 {
     font-size: 2.5rem;
     margin: 4rem 0;
 }
-input[type="text"] {
+
+article {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    padding: 2rem;
+    /* flex: 0 1 32rem; */
+    /* align-items: flex-end; */
+}
+
+input[type="text"],
+input[type="password"] {
     /* width: 7rem; */
     text-align: center;
     font-size: 1rem;
     /* color: #00ffff; */
     background: none;
-    padding: 0.5rem 0 0.5rem 1rem;
+    padding: 1rem 0 1rem 2rem;
     /* margin: 0 1rem; */
     border: #007f7f none;
     border-width: 0 0 0 4px;
 }
+
 .input {
+    /* width: 100%; */
     background-color: #ddd!important;
 }
-button{
+
+.submit {
+    padding: 1.25rem 2rem;
     width: 100%;
     background-color: #777!important;
 }
-.result,.input,button {
-    height: 2.5rem;
-    text-align: center;
+
+.result,
+.input,
+button {
+    /* height: 3rem; */
+    /* text-align: center; */
     font-size: 1rem;
     color: #ddd;
     background-color: #ddd;
     padding: 0.25rem 1rem;
-    margin: 1rem 0;
+    margin: 0.5rem 0;
     border: 0 none;
     border-radius: 16px;
 }
+
 .left {
     color: #333;
     display: inline-block;
     width: 5rem;
     text-align: center;
 }
+
 .right {
     display: inline-block;
     /* width: 7rem; */

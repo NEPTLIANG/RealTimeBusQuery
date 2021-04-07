@@ -1,28 +1,37 @@
+<!--
+ * @Author: NeptLiang
+ * @Date: 2021-03-05 13:46:26
+ * @LastEditors: NeptLiang
+ * @LastEditTime: 2021-04-07 13:51:50
+ * @Description: file content
+-->
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>实时公交</title>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0,
-            minimun-scale=1.0, maximun-scale=1.0, user-scalable=no"/>
-        <script src="show.js"></script>
-        <link href="show.css" rel="stylesheet"/>
-    </head>
-    <body>
 
-        <header>
-            <h1>标识点管理</h1>
-            <div class="action">
-                <button id="refresh">刷新</button>
-                <button id="device">校车管理</button>
-                <a href="../add/add.html" id="add">添加标识点</a>
-            </div>
-        </header>
-        <article>
-            <div id="list"></div>
-        </article>
+<head>
+    <title>实时公交</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,
+            minimun-scale=1.0, maximun-scale=1.0, user-scalable=no" />
+    <script src="show.js"></script>
+    <link href="../../Style/desktop/list.css" rel="stylesheet" />
+</head>
 
-    </body>
+<body>
+
+    <header>
+        <h1>标识点管理</h1>
+        <div class="action">
+            <button id="refresh" class="actionButton l2Button">刷新</button>
+            <button id="device" class="actionButton l2Button">校车管理</button>
+            <a href="../add/add.html" id="add" class="actionButton mainButton">添加标识点</a>
+        </div>
+    </header>
+    <article>
+        <div id="list"></div>
+    </article>
+
+</body>
 
 
 </html>

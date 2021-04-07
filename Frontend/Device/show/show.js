@@ -74,8 +74,10 @@ function show(item) {
         ">
             ${status? '点击<br/>停用' : '点击<br/>启用'}
         </button>
-        <a href='../modify/modify.html?id=${item.id}&name=${item.name}&route=${item.route}&intro=${item.intro}' class="cardOption">编辑</a>
-        <button onclick="del('${item.id}')" class="cardOption">删除</button>
+        <div class="optionDiv">
+            <a href='../modify/modify.html?id=${item.id}&name=${item.name}&route=${item.route}&intro=${item.intro}' class="cardOption">编辑</a>
+            <button onclick="del('${item.id}')" class="cardOption">删除</button>
+        </div>
     `
     document.getElementById("list").appendChild(card)
 }

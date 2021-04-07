@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('conf/conf.php');
-// header("Access-Control-Allow-Origin: *");   //线上环境记得关闭跨域
+header("Access-Control-Allow-Origin: *");   //线上环境记得关闭跨域
 
 /**
  * 鉴权
