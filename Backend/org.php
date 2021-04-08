@@ -49,7 +49,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $name = trim($_POST['name']);
         $id = trim($_POST['id']);
         $pwd = trim($_POST['pwd']);
-        if ((preg_match($pattern, $id) !== 0) && isset($pwd) && isset($name)) {
+        if ((preg_match($pattern, $id) !== 0) && !$pwd && !$name) {
             //var_dump(isset($dev));
             @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
