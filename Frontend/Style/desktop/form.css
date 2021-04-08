@@ -1,11 +1,16 @@
 @import url('./common.css');
-article {
-    display: flex;
-    flex-direction: column;
+body {
     overflow: auto;
-    padding: 2rem;
-    /* flex: 0 1 32rem; */
-    /* align-items: flex-end; */
+    padding: 2rem 0rem;
+}
+
+header {
+    align-items: baseline;
+    /* padding: 0 2rem; */
+}
+
+h1 {
+    margin: 4rem 0;
 }
 
 input[type="text"],
@@ -22,7 +27,7 @@ input[type="password"] {
 }
 
 .input {
-    width: 100%;
+    /* width: 100%; */
     background-color: #ddd!important;
 }
 

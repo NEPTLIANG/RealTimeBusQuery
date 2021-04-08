@@ -34,7 +34,7 @@ function getPwd($id) {
     if ($stmt->num_rows !== 1) {
         $db->close();
         $response["status"] = 500;
-        $response["message"] = "发生错误，无法查询";
+        $response["message"] = "发生错误，无法查询到该机构";
         exit(json_encode($response, JSON_UNESCAPED_UNICODE));
     }
     $stmt->fetch();
@@ -188,7 +188,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $_SESSION['valid_org'] = $id;
             } else {
                 $result["status"] = 500;
-                $result["message"] = "发生错误，无法查询机构信息";
+                $result["message"] = "发生错误，无法查询到该机构";
             }
             $db->close();
         } else {
