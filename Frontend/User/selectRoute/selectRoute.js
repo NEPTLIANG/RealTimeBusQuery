@@ -1,9 +1,16 @@
+import { serviceBaseUrl } from '../../Conf/conf.js'
+
 onload = () => {
+    let logoutBtn = document.getElementById('logout')
+    logoutBtn.addEventListener('click', logout)
     var refresh = document.getElementById("refresh")
     refresh.addEventListener("click", loadData)
     loadData()
 }
 
+/**
+ * 加载路线信息
+ */
 function loadData() {
     var response
     var request = new XMLHttpRequest()
@@ -54,6 +61,10 @@ function loadData() {
     request.send(null)
 }
 
+/**
+ * 显示路线信息
+ * @param {object} item 
+ */
 function show(item) {
     var card = document.createElement("div")
     var intro = item.intro ? item.intro : "暂无说明"
@@ -68,6 +79,11 @@ function show(item) {
     document.getElementById("list").appendChild(card)
 }
 
+/**
+ * 选择路线
+ * @param {string} route 
+ * @returns null
+ */
 var select = (route) => {
     if (!confirm("确定要更改路线吗？")) {
         return;
@@ -102,4 +118,18 @@ var select = (route) => {
     request.open(method, url, true)
     request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
     request.send(content)
+}
+
+function logout() {
+    fetch(`${serviceBaseUrl}/logout.php`)
+        .then(res => res.json())
+        .then(response => {
+            if (response.status === 200) {
+                alert('注销成功');
+            } else {
+                alert(`注销失败：${response.message}`);
+            }
+        }).catch(err => {
+            console.log(err);
+        });
 }

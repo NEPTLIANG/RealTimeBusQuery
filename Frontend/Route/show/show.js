@@ -1,11 +1,11 @@
 import { serviceBaseUrl } from '../../Conf/conf.js';
 
 onload = () => {
-    // location.reload();
-    var refresh = document.getElementById("refresh")
-    refresh.addEventListener("click", loadData)
     let logoutBtn = document.getElementById('logout')
     logoutBtn.addEventListener('click', logout)
+        // location.reload();
+    var refresh = document.getElementById("refresh")
+    refresh.addEventListener("click", loadData)
     loadData()
 }
 
@@ -125,11 +125,14 @@ var del = (id) => {
  * 注销登录
  */
 function logout() {
-    let url = `${serviceBaseUrl}/logout.php`;
-    fetch(url)
+    fetch(`${serviceBaseUrl}/logout.php`)
         .then(res => res.json())
         .then(response => {
-            console.log(response);
+            if (response.status === 200) {
+                alert('注销成功');
+            } else {
+                alert(`注销失败：${response.message}`);
+            }
         })
         .catch(err => {
             console.log(err);

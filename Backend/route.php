@@ -136,7 +136,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $query = "SELECT id, name, org, intro "
                 . "FROM route";
             $stmt = $db->prepare($query);
-            $stmt->bind_result($id, $name, $ort, $intro);
+            $stmt->bind_result($id, $name, $org, $intro);
             $stmt->execute();
             $stmt->store_result();
             if ($stmt->num_rows > 0) {
