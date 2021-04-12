@@ -1,10 +1,17 @@
+import { serviceBaseUrl } from '../../Conf/conf.js';
+
 onload = () => {
     // location.reload();
     var refresh = document.getElementById("refresh")
     refresh.addEventListener("click", loadData)
+    let logoutBtn = document.getElementById('logout')
+    logoutBtn.addEventListener('click', logout)
     loadData()
 }
 
+/**
+ * 获取路线信息
+ */
 function loadData() {
     var org = location.search.split("=")[1]
     console.log(org)
@@ -55,6 +62,10 @@ function loadData() {
     request.send(null)
 }
 
+/**
+ * 显示路线信息
+ * @param {object} item 路线
+ */
 function show(item) {
     var card = document.createElement("div")
     var intro = item.intro ? item.intro : "暂无说明"
@@ -70,6 +81,11 @@ function show(item) {
     document.getElementById("list").appendChild(link)
 }
 
+/**
+ * 删除路线
+ * @param {string} id 路线ID
+ * @returns null
+ */
 var del = (id) => {
     if (!confirm("确定要删除路线吗？")) {
         return;
@@ -103,4 +119,19 @@ var del = (id) => {
     request.open(method, url, true)
     request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
     request.send(content)
+}
+
+/**
+ * 注销登录
+ */
+function logout() {
+    let url = `${serviceBaseUrl}/logout.php`;
+    fetch(url)
+        .then(res => res.json())
+        .then(response => {
+            console.log(response);
+        })
+        .catch(err => {
+            console.log(err);
+        });
 }

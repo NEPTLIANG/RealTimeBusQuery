@@ -1,9 +1,14 @@
 @import url('./common.css');
+
+/* body {
+    padding: 6rem 0;
+} */
+
 article {
     display: flex;
     flex-direction: column;
     overflow: auto;
-    padding: 2rem;
+    padding: 4rem 2rem;
     /* flex: 0 1 32rem; */
     /* align-items: flex-end; */
 }

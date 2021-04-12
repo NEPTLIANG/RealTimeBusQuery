@@ -42,7 +42,7 @@ function getPwd($id) {
     if ($stmt->num_rows !== 1) {
         $db->close();
         $response["status"] = 500;
-        $response["message"] = "发生错误，无法查询";
+        $response["message"] = "发生错误，无法查询到该用户";
         exit(json_encode($response, JSON_UNESCAPED_UNICODE));
     }
     $stmt->fetch();

@@ -2,7 +2,7 @@
  * @Author: NeptLiang
  * @Date: 2021-03-05 13:46:26
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-04-07 10:12:31
+ * @LastEditTime: 2021-04-09 10:46:47
  * @Description: 用户登录
  */
 onload = () => {
@@ -10,6 +10,10 @@ onload = () => {
     addBtn.addEventListener("click", function() {
         var id = document.getElementById("id").value;
         var pwd = CryptoJS.SHA512(document.getElementById("pwd").value).toString();
+        if (!id || !document.getElementById("pwd").value) {
+            alert('请填写ID、密码');
+            return;
+        }
         var url = "http://122.51.3.35/user.php?" + "id=" + id + "&pwd=" + pwd;
         if (typeof "XMLHttpRequest" !== "undefined") {
             var xhr = new XMLHttpRequest();

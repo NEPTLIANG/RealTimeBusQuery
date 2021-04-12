@@ -1,20 +1,41 @@
+/*
+ * @Author: NeptLiang
+ * @Date: 2021-03-05 13:46:26
+ * @LastEditors: NeptLiang
+ * @LastEditTime: 2021-04-09 10:19:41
+ * @Description: 用户注册
+ */
+
+/**
+ * 基本判空
+ * @returns content || false
+ */
+function checkout() {
+    var name = document.getElementById("name").value;
+    var id = document.getElementById("id").value;
+    var pwd = CryptoJS.SHA512(document.getElementById("pwd").value).toString();
+    var pwd2 = CryptoJS.SHA512(document.getElementById("pwd2").value).toString();
+    if (!name || !id || !document.getElementById("pwd").value) {
+        alert('请完整填写信息');
+        return false;
+    }
+    if (pwd !== pwd2) {
+        alert("两次密码不一致");
+        document.getElementById("pwd").value = "";
+        document.getElementById("pwd2").value = "";
+        return false;
+    }
+    return `name=${name}&id=${id}&pwd=${pwd}`;
+}
+
 onload = () => {
     var addBtn = document.getElementById("regist");
-    addBtn.addEventListener("click", function () {
-        var name = document.getElementById("name").value;
-        console.log(name)
-        var id = document.getElementById("id").value;
-        var pwd = CryptoJS.SHA512(document.getElementById("pwd").value).toString();
-        var pwd2 = CryptoJS.SHA512(document.getElementById("pwd2").value).toString();
-        if (pwd !== pwd2) {
-            alert("两次密码不一致");
-            document.getElementById("pwd").value = "";
-            document.getElementById("pwd2").value = "";
+    addBtn.addEventListener("click", function() {
+        var url = "http://122.51.3.35/user.php"
+        let content = checkout();
+        if (!content) {
             return;
         }
-        var url = "http://122.51.3.35/user.php"
-        content = "name=" + name + "&id=" + id + "&pwd=" + pwd;
-        console.log(url)
         if (typeof "XMLHttpRequest" !== "undefined") {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = () => {
@@ -26,7 +47,7 @@ onload = () => {
                         } catch (e) {
                             alert("没有响应");
                         }
-                        if (typeof (response) !== "undefined") {
+                        if (typeof(response) !== "undefined") {
                             if (response.status === 200) {
                                 // location = "../Map/map.html"
                                 console.log("OK")

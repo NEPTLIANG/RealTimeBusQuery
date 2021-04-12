@@ -30,7 +30,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             if (mysqli_connect_errno()) {
                 $result["status"] = 500;
                 $result["message"] = "无法连接到数据库，请稍后重试";
-                exit(json_encode($result));
+                exit(json_encode($result, JSON_UNESCAPED_UNICODE));
             }
             $db->select_db("RealTimeBusQuery");
             $query = "INSERT INTO route VALUES (?, ?, ?, ?)";
@@ -50,7 +50,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $result["status"] = 400;
             $result["message"] = "不合法的值";
         }
-        exit(json_encode($result));
+        exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         break;
     case "PUT":
         authentification();
@@ -84,7 +84,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $result["status"] = 400;
             $result["message"] = "不合法的值";
         }
-        exit(json_encode($result));
+        exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         break;
     case "GET":
         if (isset($_GET["org"])) {
@@ -112,7 +112,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             "org" => $org,
                             "intro" => $intro
                         ];
-                        array_push($routes, json_encode($route));
+                        array_push($routes, json_encode($route, JSON_UNESCAPED_UNICODE));
                     }
                     $db->close();
                     $result["status"] = 200;
@@ -126,7 +126,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $result["status"] = 400;
                 $result["message"] = "不合法的值";
             }
-            exit(json_encode($result));
+            exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         } else {
             @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
             if (mysqli_connect_errno()) {
@@ -148,7 +148,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                         "org" => $org,
                         "intro" => $intro
                     ];
-                    array_push($routes, json_encode($route));
+                    array_push($routes, json_encode($route, JSON_UNESCAPED_UNICODE));
                 }
                 $db->close();
                 $result["status"] = 200;
@@ -158,7 +158,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $result["status"] = 500;
                 $result["message"] = "暂无路线";
             }
-            exit(json_encode($result));
+            exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         }
         break;
     case "DELETE":

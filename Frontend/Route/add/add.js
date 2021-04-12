@@ -1,6 +1,14 @@
+/*
+ * @Author: NeptLiang
+ * @Date: 2021-03-05 13:46:26
+ * @LastEditors: NeptLiang
+ * @LastEditTime: 2021-04-12 09:52:51
+ * @Description: 添加路线
+ */
+
 onload = () => {
     var addBtn = document.getElementById("add");
-    addBtn.addEventListener("click", function () {
+    addBtn.addEventListener("click", function() {
         var id = document.getElementById("id").value;
         var name = document.getElementById("name").value;
         var org = document.getElementById("org").value;
@@ -13,16 +21,7 @@ onload = () => {
             xhr.onreadystatechange = () => {
                 if (xhr.readyState == 4) {
                     if (xhr.status == "200") {
-                        // var x = eval(xhr.responseText);
-                        try {
-                            console.log(xhr.responseText)
-                            var response = JSON.parse(xhr.responseText);
-                        } catch (e) {
-                            alert("没有响应");
-                        }
-                        if (typeof (response) !== "undefined") {
-                            alert("路线添加成功");
-                        }
+                        handleResponse(xhr.responseText);
                     } else {
                         alert("请求失败");
                     }
@@ -33,4 +32,22 @@ onload = () => {
             xhr.send(content);
         }
     })
+}
+
+function handleResponse(responseText) {
+    // var x = eval(xhr.responseText);
+    try {
+        console.log(responseText)
+        var response = JSON.parse(responseText);
+    } catch (e) {
+        alert("没有响应");
+    }
+    if (typeof(response) === "undefined") {
+        alert("添加失败，响应格式错误");
+    }
+    if (response.status === 200) {
+        alert('添加成功');
+    } else {
+        alert(`添加失败：${response.message}`);
+    }
 }
