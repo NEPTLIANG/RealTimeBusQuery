@@ -63,7 +63,7 @@ function loadData() {
 
 /**
  * 显示路线信息
- * @param {object} item 
+ * @param {object} item 路线信息
  */
 function show(item) {
     var card = document.createElement("div")
@@ -72,16 +72,17 @@ function show(item) {
     card.innerHTML = `<h2>${item.name}</h2>
         <span class="id">所属机构: ${item.org}</span>
         <div>${intro}</div>
-        <button onclick="select('${item.id}')" class="cardButton">选择</button>`
+        <button onclick="select('${item.id}')" id="${item.id}" class="cardButton">选择</button>`
         // var link = document.createElement("a")
         // link.href = `../../Device/show/show.html?route=${item.id}`
         // link.appendChild(card)
     document.getElementById("list").appendChild(card)
+    document.getElementById("item.id}").onclick = () => select(item.id); //要append到DOM中后才能get到Element
 }
 
 /**
  * 选择路线
- * @param {string} route 
+ * @param {string} route 路线id
  * @returns null
  */
 var select = (route) => {
@@ -95,11 +96,12 @@ var select = (route) => {
     request.onreadystatechange = () => {
         if (request.readyState == 4) {
             if ((request.status >= 200 && request.status < 300) || request.status == 304) {
+                let response = {};
                 try {
                     console.log(request.responseText)
                     response = JSON.parse(request.responseText);
                 } catch (e) {}
-                if (typeof(response) !== "undefined") {
+                if (typeof(response) !== {}) {
                     if (response.status == 200) {
                         alert("更改成功")
                         loadData()
@@ -120,6 +122,9 @@ var select = (route) => {
     request.send(content)
 }
 
+/**
+ * 注销登录
+ */
 function logout() {
     fetch(`${serviceBaseUrl}/logout.php`)
         .then(res => res.json())

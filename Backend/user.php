@@ -87,13 +87,14 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case "PUT":
         authentification();
         parse_str(file_get_contents('php://input'), $put);
-        if (isset($id['route'])) {      //用户添加路线
+        if (isset($put['route'])) {      //用户添加路线
             $id = trim($_SESSION['valid_user']);
             $route = trim($put["route"]);
             if ((/* !preg_match($pattern, $id) !== 0) &&  */
-                !preg_match($pattern, $route) !== 0)) {
+                !(preg_match($pattern, $route) !== 0))) {   //此处取反前应有括号
                 $response["status"] = 400;
                 $response["message"] = "不合法的值";
+                exit(json_encode($response, JSON_UNESCAPED_UNICODE));
             }
             @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {

@@ -42,8 +42,25 @@ header {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     padding: 0 3rem;
+}
+
+.backButton {
+    flex: none;
+    display: inline-block;
+    margin: 1rem 1rem 1rem 0.5rem;
+    /* padding: 1rem; */
+    padding: 0;
+    text-decoration: none;
+    font-size: 16px;
+    /* line-height: 2.5rem; */
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 4rem;
+    color: #777;
+    background: none;
+    border: 4px #777 solid;
 }
 
 h1 {

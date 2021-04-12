@@ -4,6 +4,10 @@
     padding: 6rem 0;
 } */
 
+header {
+    align-items: baseline;
+}
+
 article {
     display: flex;
     flex-direction: column;
