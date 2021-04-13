@@ -84,8 +84,15 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 exit(json_encode($result, JSON_UNESCAPED_UNICODE));
             }
             $db->select_db("RealTimeBusQuery");
-            $query = "INSERT INTO device VALUES (?, ?, ?, 0, 0, ?)";
+            $query = "INSERT INTO device VALUES (?, ?, ?, 0, 0, ?, 0x00)";
             $stmt = $db->prepare($query);
+            if (!$stmt) {
+                // exit(var_dump($db->error_list[0]['error']));
+                // $errMsg = json_encode($db->error_list);
+                $result['status'] = 500;
+                $result['message'] = "设备添加失败，查询出错：{$db->error_list[0]['error']}";
+                exit(json_encode($result, JSON_UNESCAPED_UNICODE));
+            }
             $stmt->bind_param("ssss", $id, $name, $route, $intro);
             $stmt->execute();
             if ($stmt->affected_rows > 0) {

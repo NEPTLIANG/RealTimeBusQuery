@@ -74,11 +74,19 @@ function show(item) {
         <span class="id">id: ${item.id}</span>
         <div>${intro}</div>
         <a href='../modify/modify.html?id=${item.id}&name=${item.name}&org=${item.org}&intro=${item.intro}' class="cardButton">编辑</a>
-        <button onclick="del('${item.id}')" class="cardOption">删除</button>`
-    var link = document.createElement("a")
-    link.href = `../../Device/show/show.html?route=${item.id}`
-    link.appendChild(card)
-    document.getElementById("list").appendChild(link)
+        <button id="${item.id}" class="cardOption">删除</button>`
+    // var link = document.createElement("a")
+    // link.href = `../../Device/show/show.html?route=${item.id}`
+    // link.appendChild(card)
+    // document.getElementById("list").appendChild(link)
+    document.getElementById("list").appendChild(card)
+    card.addEventListener('click', () => {
+        location = `../../Device/show/show.html?route=${item.id}`
+    })
+    document.getElementById(item.id).addEventListener('click', e => {
+        e.stopPropagation()
+        del(item.id)
+    })
 }
 
 /**
