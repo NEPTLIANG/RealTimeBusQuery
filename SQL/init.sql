@@ -31,6 +31,16 @@ ALTER TABLE route
 ALTER TABLE route
     MODIFY name VARCHAR(20) NOT NULL;
 
+delimiter |
+CREATE TRIGGER autoDel BEFORE DELETE ON route   /* 路线删除触发器 */
+    FOR EACH ROW
+    BEGIN
+        DELETE FROM identification WHERE route = OLD.id;
+        DELETE FROM device WHERE route = OLD.id;
+    END;
+|
+delimiter ;
+
 CREATE TABLE identification(  /*标识点*/
     name VARCHAR(20),
     id VARCHAR(20),

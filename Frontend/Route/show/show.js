@@ -94,8 +94,8 @@ function show(item) {
  * @param {string} id 路线ID
  * @returns null
  */
-var del = (id) => {
-    if (!confirm("确定要删除路线吗？")) {
+let del = id => {
+    if (!confirm('确定要删除路线吗？此操作将把路线下属设备与标识点一并删除，且无法恢复')) {
         return;
     }
     var request = new XMLHttpRequest()
@@ -108,8 +108,10 @@ var del = (id) => {
                 try {
                     console.log(request.responseText)
                     response = JSON.parse(request.responseText);
-                } catch (e) {}
-                if (typeof(response) !== "undefined") {
+                } catch (e) {
+                    alert("响应格式错误，请稍后重试")
+                }
+                if (typeof(response) !== {}) {
                     if (response.status == 200) {
                         alert("删除成功")
                         loadData()

@@ -182,12 +182,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $stmt = $db->prepare($query);
         $stmt->bind_param("s", $id);
         $stmt->execute();
-        if ($stmt->affected_rows) {
+        if ($stmt->affected_rows === 1) {
             $response['status'] = 200;
             $response['describe'] = "OK";
+            // $response['describe'] = $stmt->affected_rows;
         } else {
             $response['status'] = 500;
-            $response['message'] = "发生错误，路线未删除";
+            $response['message'] = "{$stmt->affected_rows}：发生错误，路线未删除";
         }
         $db->close();
         exit(json_encode($response, JSON_UNESCAPED_UNICODE));
