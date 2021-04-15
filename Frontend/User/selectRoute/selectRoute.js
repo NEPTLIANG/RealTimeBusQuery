@@ -77,7 +77,7 @@ function show(item) {
         // link.href = `../../Device/show/show.html?route=${item.id}`
         // link.appendChild(card)
     document.getElementById("list").appendChild(card)
-    document.getElementById("item.id}").onclick = () => select(item.id); //要append到DOM中后才能get到Element
+    document.getElementById(item.id).onclick = () => select(item.id); //要append到DOM中后才能get到Element
 }
 
 /**

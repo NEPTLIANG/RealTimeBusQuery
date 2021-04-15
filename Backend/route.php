@@ -182,7 +182,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $stmt = $db->prepare($query);
         $stmt->bind_param("s", $id);
         $stmt->execute();
-        if ($stmt->affected_rows === 1) {
+        if ($stmt->affected_rows >= 1) {
             $response['status'] = 200;
             $response['describe'] = "OK";
             // $response['describe'] = $stmt->affected_rows;
