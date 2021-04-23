@@ -2,6 +2,7 @@
 session_start();
 include('conf/conf.php');
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+header("Access-Control-Allow-Origin: http://neptliang.site");
 // header("Access-Control-Allow-Origin: *");   //线上环境记得关闭跨域
 // if (isset($_SERVER['HTTP_ORIGIN'])) {
 //     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");

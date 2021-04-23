@@ -1,3 +1,5 @@
+import { serviceBaseUrl } from '../Conf/conf.js'
+
 var map = {};
 var userId = location.search.split("=")[1];
 var routeId = "";
@@ -150,7 +152,7 @@ function handleIdentifications(response) {
  * 获取车辆和标记点
  */
 function getCars() {
-    var url = `http://122.51.3.35/device.php?route=${routeId}`; //获取车辆
+    var url = `${serviceBaseUrl}/user.php?id=${userId}`; //获取路线
     if (typeof XMLHttpRequest != "undefined") {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = () => {
