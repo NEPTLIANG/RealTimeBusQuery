@@ -64,11 +64,15 @@ function authentification() {
 switch ($_SERVER['REQUEST_METHOD']) {
     case "POST" :
         authentification();
-        $name = trim($_POST['name']);
-        $id = trim($_POST['id']);
-        $route = trim($_POST['route']);
-        $intro = trim($_POST['intro']);
-        $intro = isset($intro) ? $intro : "暂无说明";
+        if (!isset($_POST['name']) || !isset($_POST['id']) || !isset($_POST['route'])) {
+            $result['status'] = 400;
+            $result['message'] = '参数缺失';
+            exit(json_encode($result, JSON_UNESCAPED_UNICODE));
+        }
+        $name   = trim($_POST['name']);
+        $id     = trim($_POST['id']);
+        $route  = trim($_POST['route']);
+        $intro = (isset($_POST['intro']) && trim($_POST['intro'])) ? trim($_POST['intro']) : "暂无说明";
         if (isset($name) && isset($id) && isset($route)) {
             $dev = new Device($name, $id, $route);
         } else {

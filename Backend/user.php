@@ -104,8 +104,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 exit(json_encode($response, JSON_UNESCAPED_UNICODE));
             }
             $db->select_db("RealTimeBusQuery");
-            $query = "UPDATE user "
-                . "SET route=? "
+            $query = "UPDATE user " 
+                . "SET route=? " 
                 . "WHERE id=?";
             $stmt = $db->prepare($query);
             $stmt->bind_param("ss", $route, $id);

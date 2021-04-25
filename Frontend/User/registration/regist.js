@@ -2,9 +2,10 @@
  * @Author: NeptLiang
  * @Date: 2021-03-05 13:46:26
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-04-09 10:19:41
+ * @LastEditTime: 2021-04-25 13:45:31
  * @Description: 用户注册
  */
+import { serviceBaseUrl } from '../../Conf/conf.js'
 
 /**
  * 基本判空
@@ -31,7 +32,7 @@ function checkout() {
 onload = () => {
     var addBtn = document.getElementById("regist");
     addBtn.addEventListener("click", function() {
-        var url = "http://122.51.3.35/user.php"
+        var url = `${serviceBaseUrl}/user.php`
         let content = checkout();
         if (!content) {
             return;

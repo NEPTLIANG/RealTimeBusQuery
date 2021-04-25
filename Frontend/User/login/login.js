@@ -2,9 +2,11 @@
  * @Author: NeptLiang
  * @Date: 2021-03-05 13:46:26
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-04-24 03:25:16
+ * @LastEditTime: 2021-04-25 19:03:29
  * @Description: 用户登录
  */
+import { serviceBaseUrl } from '../../Conf/conf.js'
+
 onload = () => {
     var addBtn = document.getElementById("add");
     addBtn.addEventListener("click", function() {
@@ -14,7 +16,7 @@ onload = () => {
             alert('请填写ID、密码');
             return;
         }
-        var url = "http://neptliang.site/user.php?" + "id=" + id + "&pwd=" + pwd;
+        var url = `${serviceBaseUrl}/user.php?id=${id}&pwd=${pwd}`;
         if (typeof "XMLHttpRequest" !== "undefined") {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = () => {

@@ -19,11 +19,15 @@ $pattern = "/^[a-zA-Z0-9_\-]{1,20}$/";
 switch ($_SERVER['REQUEST_METHOD']) {
     case "POST" :
         authentification();
+        if (!isset($_POST['name']) || !isset($_POST['id']) || !isset($_POST['org'])) {
+            $result['status'] = 400;
+            $result['message'] = '参数缺失';
+            exit(json_encode($result, JSON_UNESCAPED_UNICODE));
+        }
         $name = trim($_POST['name']);
         $id = trim($_POST['id']);
         $org = trim($_POST['org']);
-        $intro = trim($_POST['intro']);
-        $intro = isset($intro) ? $intro : "暂无说明";
+        $intro = (isset($_POST['intro']) && trim($_POST['intro'])) ? trim($_POST['intro']) : "暂无说明";
         if ((preg_match($pattern, $id) !== 0) && (preg_match($pattern, $org) !== 0) && isset($name)) {
             //var_dump(isset($dev));
             @$db = new mysqli("127.0.0.1", "root", $dbPwd);
@@ -55,10 +59,15 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case "PUT":
         authentification();
         parse_str(file_get_contents('php://input'), $data);
+        if (!isset($data['name']) || !isset($data['id']) || !isset($data['org'])) {
+            $result['status'] = 400;
+            $result['message'] = '参数缺失';
+            exit(json_encode($result, JSON_UNESCAPED_UNICODE));
+        }
         $id = trim($data["id"]);
         $name = trim($data["name"]);
         $org = trim($data["org"]);
-        $intro = trim($data["intro"]);
+        $intro = (isset($data['intro']) && trim($data['intro'])) ? trim($data['intro']) : "暂无说明";
         if ((preg_match($pattern, $id) !== 0) && (preg_match($pattern, $org) !== 0) && isset($name)) {
             @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {

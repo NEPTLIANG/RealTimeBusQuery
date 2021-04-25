@@ -2,9 +2,11 @@
  * @Author: NeptLiang
  * @Date: 2021-03-05 13:46:26
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-04-08 17:13:12
+ * @LastEditTime: 2021-04-25 19:05:18
  * @Description: 登录
  */
+import { serviceBaseUrl } from '../../Conf/conf.js'
+
 onload = () => {
     var loginBtn = document.getElementById("login");
     loginBtn.addEventListener("click", function() {
@@ -15,7 +17,7 @@ onload = () => {
             return;
         }
         // console.log(pwd);
-        var url = "http://122.51.3.35/org.php?" + "id=" + id + "&pwd=" + pwd;
+        var url = `${serviceBaseUrl}/org.php?id=${id}&pwd=${pwd}`;
         if (typeof "XMLHttpRequest" !== "undefined") {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = () => {

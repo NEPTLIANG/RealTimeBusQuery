@@ -18,7 +18,7 @@ function loadData() {
     var response
     var request = new XMLHttpRequest()
     var method = "GET"
-    var url = `http://122.51.3.35/route.php?org=${org}`
+    var url = `${serviceBaseUrl}/route.php?org=${org}`
     request.onreadystatechange = () => {
         if (request.readyState == 4) {
             if ((request.status >= 200 && request.status < 300) || request.status == 304) {
@@ -75,10 +75,10 @@ function show(item) {
         <div>${intro}</div>
         <a href='../modify/modify.html?id=${item.id}&name=${item.name}&org=${item.org}&intro=${item.intro}' class="cardButton">编辑</a>
         <button id="${item.id}" class="cardOption">删除</button>`
-    // var link = document.createElement("a")
-    // link.href = `../../Device/show/show.html?route=${item.id}`
-    // link.appendChild(card)
-    // document.getElementById("list").appendChild(link)
+        // var link = document.createElement("a")
+        // link.href = `../../Device/show/show.html?route=${item.id}`
+        // link.appendChild(card)
+        // document.getElementById("list").appendChild(link)
     document.getElementById("list").appendChild(card)
     card.addEventListener('click', () => {
         location = `../../Device/show/show.html?route=${item.id}`

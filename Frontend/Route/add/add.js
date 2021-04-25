@@ -2,9 +2,10 @@
  * @Author: NeptLiang
  * @Date: 2021-03-05 13:46:26
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-04-12 09:52:51
+ * @LastEditTime: 2021-04-25 15:36:49
  * @Description: 添加路线
  */
+import { serviceBaseUrl } from '../../Conf/conf.js';
 
 onload = () => {
     var addBtn = document.getElementById("add");
@@ -15,7 +16,7 @@ onload = () => {
         var intro = document.getElementById("intro").value;
         intro = (intro.length > 0) ? intro : "暂无说明";
         var content = "id=" + id + "&name=" + name + "&org=" + org + "&intro=" + intro;
-        var url = "http://122.51.3.35/route.php";
+        var url = `${serviceBaseUrl}/route.php`;
         if (typeof "XMLHttpRequest" !== "undefined") {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = () => {
