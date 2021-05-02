@@ -15,7 +15,7 @@ function loadData() {
     var response
     var request = new XMLHttpRequest()
     var method = "GET"
-    var url = `http://122.51.3.35/route.php`
+    var url = `${serviceBaseUrl}/route.php`
     request.onreadystatechange = () => {
         if (request.readyState == 4) {
             if ((request.status >= 200 && request.status < 300) || request.status == 304) {
@@ -91,8 +91,9 @@ var select = (route) => {
     }
     var request = new XMLHttpRequest()
     var method = "PUT"
-    var url = "http://122.51.3.35/user.php"
-    var content = `route=${route}&id=444`
+    var url = `${serviceBaseUrl}/user.php`
+    let id = localStorage.getItem('user')
+    var content = `route=${route}&id=${id}`
     request.onreadystatechange = () => {
         if (request.readyState == 4) {
             if ((request.status >= 200 && request.status < 300) || request.status == 304) {

@@ -2,7 +2,7 @@
  * @Author: NeptLiang
  * @Date: 2021-03-05 13:46:26
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-04-25 19:03:29
+ * @LastEditTime: 2021-05-03 01:49:45
  * @Description: 用户登录
  */
 import { serviceBaseUrl } from '../../Conf/conf.js'
@@ -30,6 +30,7 @@ onload = () => {
                         }
                         if (typeof(response) !== "undefined") {
                             if (response.status === 200) {
+                                localStorage.setItem('user', id);
                                 location = `../../Map/map.html?id=${id}`
                             } else {
                                 alert(response.message);

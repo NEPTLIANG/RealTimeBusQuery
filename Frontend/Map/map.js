@@ -51,7 +51,7 @@ function mapInit() {
  * 获取路线
  */
 function getRoute() {
-    var url = `http://122.51.3.35/user.php?id=${userId}`; //获取路线
+    var url = `${serviceBaseUrl}/user.php?id=${userId}`; //获取路线
     if (typeof XMLHttpRequest != "undefined") {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = () => {
@@ -84,7 +84,7 @@ function getRoute() {
  * 获取标识点
  */
 function getIdentifications() {
-    var url = `http://122.51.3.35/identification.php?route=${routeId}`; //获取标识点
+    var url = `${serviceBaseUrl}/identification.php?route=${routeId}`; //获取标识点
     if (typeof XMLHttpRequest != "undefined") {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = () => {
@@ -149,10 +149,10 @@ function handleIdentifications(response) {
 }
 
 /**
- * 获取车辆和标记点
+ * 获取车辆
  */
 function getCars() {
-    var url = `${serviceBaseUrl}/user.php?id=${userId}`; //获取路线
+    var url = `${serviceBaseUrl}/device.php?route=${routeId}`;
     if (typeof XMLHttpRequest != "undefined") {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = () => {
