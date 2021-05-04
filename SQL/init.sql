@@ -41,6 +41,16 @@ CREATE TRIGGER autoDel BEFORE DELETE ON route   /* 路线删除触发器 */
 |
 delimiter ;
 
+delimiter |
+CREATE TRIGGER autoUpdate BEFORE UPDATE ON route    /* 路线修改ID触发器 */
+    FOR EACH ROW
+    BEGIN
+        UPDATE identification SET id = NEW.id WHERE id = OLD.id;
+        UPDATE device SET id = NEW.id WHERE id = OLD.id;
+    END;
+|
+delimiter ;
+
 CREATE TABLE identification(  /*标识点*/
     name VARCHAR(20),
     id VARCHAR(20),
