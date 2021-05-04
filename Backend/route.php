@@ -59,16 +59,18 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case "PUT":
         authentification();
         parse_str(file_get_contents('php://input'), $data);
-        if (!isset($data['name']) || !isset($data['id']) || !isset($data['org'])) {
+        if (!isset($data['name']) || !isset($data['oldId']) || !isset($data['newId']) || !isset($data['org'])) {
             $result['status'] = 400;
             $result['message'] = '参数缺失';
             exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         }
-        $id = trim($data["id"]);
+        $oldId = trim($data["oldId"]);
+        $newId = trim($data['newId']);
         $name = trim($data["name"]);
         $org = trim($data["org"]);
         $intro = (isset($data['intro']) && trim($data['intro'])) ? trim($data['intro']) : "暂无说明";
-        if ((preg_match($pattern, $id) !== 0) && (preg_match($pattern, $org) !== 0) && isset($name)) {
+        if ((preg_match($pattern, $oldId) !== 0) && preg_match($pattern, $newId)
+            && (preg_match($pattern, $org) !== 0) && isset($name)) {
             @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
                 exit("无法连接到数据库，请稍后重试");
@@ -78,7 +80,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 . "SET id=?, name=?, org=?, intro=? "
                 . "WHERE id=?";
             $stmt = $db->prepare($query);
-            $stmt->bind_param("sssss", $id, $name, $org, $intro, $id);
+            $stmt->bind_param("sssss", $newId, $name, $org, $intro, $oldId);
             $stmt->execute();
             if ($stmt->affected_rows > 0) {
                 $result["status"] = 200;
