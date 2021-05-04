@@ -2,12 +2,11 @@
  * @Author: NeptLiang
  * @Date: 2021-04-01 09:30:59
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-05-04 14:38:37
+ * @LastEditTime: 2021-05-04 17:36:22
  * @Description: 修改信息/密码
  */
 import { serviceBaseUrl } from '../../Conf/conf.js'
 
-//TODO: 注销待完成
 onload = () => {
     let pwdBox = document.getElementById('pwdBox');
     let changePwdCheckBox = document.getElementById('changePwd');
@@ -37,13 +36,13 @@ onload = () => {
                 return;
             }
             var url = `${serviceBaseUrl}/org.php`
-            content = `name=${name}&oldPwd=${oldPwd}&newPwd=${newPwd}`;
+            let content = `name=${name}&oldPwd=${oldPwd}&newPwd=${newPwd}`;
             if (typeof "XMLHttpRequest" !== "undefined") {
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = () => {
                     if (xhr.readyState == 4) {
                         if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
-                            handleResponse(xhr) //TODO: 注销待完成
+                            handleResponse(xhr)
                         } else {
                             alert("请求失败，请稍后再试");
                         }
@@ -86,7 +85,8 @@ function handleResponse(xhr) {
     if (typeof(response) !== "undefined") {
         if (response.status === 200) {
             alert("修改成功，请重新登录")
-            location = "../login/login.html" //TODO: 注销待完成
+            fetch(`${serviceBaseUrl}/logout.php`);
+            location = "../login/login.html"
         } else {
             alert(`修改失败：${response.message}`);
         }

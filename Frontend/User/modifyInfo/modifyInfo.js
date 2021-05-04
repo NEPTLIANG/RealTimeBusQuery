@@ -2,12 +2,11 @@
  * @Author: NeptLiang
  * @Date: 2021-04-01 09:30:59
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-05-04 14:46:58
+ * @LastEditTime: 2021-05-04 17:28:03
  * @Description: 修改信息/密码
  */
 import { serviceBaseUrl } from '../../Conf/conf.js'
 
-//TODO: 注销待完成
 onload = () => {
     let changePwdCheckBox = document.getElementById('changePwd');
     let pwdBox = document.getElementById('pwdBox');
@@ -21,7 +20,7 @@ onload = () => {
             alert('用户名不能为空');
             return;
         }
-        if (changePwdCheckBox.checked) {
+        if (changePwdCheckBox.checked) { //修改密码
             if (!document.getElementById("oldPwd").value ||
                 !document.getElementById("newPwd").value ||
                 !document.getElementById("confirmPwd").value) {
@@ -38,13 +37,13 @@ onload = () => {
                 return;
             }
             var url = `${serviceBaseUrl}/user.php`
-            content = `name=${name}&oldPwd=${oldPwd}&newPwd=${newPwd}`;
+            let content = `name=${name}&oldPwd=${oldPwd}&newPwd=${newPwd}`;
             if (typeof "XMLHttpRequest" !== "undefined") {
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = () => {
                     if (xhr.readyState == 4) {
                         if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
-                            handleResponse(xhr) //TODO: 注销待完成
+                            handleResponse(xhr)
                         } else {
                             alert("请求失败，请稍后再试");
                         }
@@ -54,7 +53,7 @@ onload = () => {
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                 xhr.send(content);
             }
-        } else {
+        } else { //修改信息
             fetch(`${serviceBaseUrl}/user.php`, {
                 method: 'PUT',
                 body: `name=${name}`
@@ -87,7 +86,8 @@ function handleResponse(xhr) {
     if (typeof(response) !== "undefined") {
         if (response.status === 200) {
             alert("修改成功，请重新登录")
-            location = "../login/login.html" //TODO: 注销待完成
+            fetch(`${serviceBaseUrl}/logout.php`);
+            location = "../login/login.html"
         } else {
             alert(`修改失败：${response.message}`);
         }
