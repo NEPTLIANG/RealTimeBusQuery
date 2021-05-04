@@ -2,7 +2,7 @@
  * @Author: NeptLiang
  * @Date: 2021-03-05 13:46:26
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-04-25 15:36:49
+ * @LastEditTime: 2021-05-04 12:30:49
  * @Description: 添加路线
  */
 import { serviceBaseUrl } from '../../Conf/conf.js';
@@ -15,6 +15,10 @@ onload = () => {
         var org = document.getElementById("org").value;
         var intro = document.getElementById("intro").value;
         intro = (intro.length > 0) ? intro : "暂无说明";
+        if (!id || !name || !org) {
+            alert('请完整填写信息');
+            return;
+        }
         var content = "id=" + id + "&name=" + name + "&org=" + org + "&intro=" + intro;
         var url = `${serviceBaseUrl}/route.php`;
         if (typeof "XMLHttpRequest" !== "undefined") {
