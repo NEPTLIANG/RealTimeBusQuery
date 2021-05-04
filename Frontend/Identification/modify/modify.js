@@ -2,9 +2,11 @@
  * @Author: NeptLiang
  * @Date: 2021-03-05 13:46:26
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-04-07 16:02:48
+ * @LastEditTime: 2021-05-04 14:27:42
  * @Description: 修改标识点
  */
+import { serviceBaseUrl } from '../../Conf/conf.js'
+
 onload = () => {
     getInfo();
     var modifyBtn = document.getElementById("modify");
@@ -17,7 +19,7 @@ onload = () => {
         // var lat = document.getElementById("lnglat").value.split(",")[1];
         intro = (intro.length > 0) ? intro : "暂无说明";
         var content = "id=" + id + "&name=" + name + "&route=" + route + "&intro=" + intro;
-        var url = "http://122.51.3.35/identification.php";
+        var url = `${serviceBaseUrl}/identification.php`;
         if (typeof "XMLHttpRequest" !== "undefined") {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = () => {

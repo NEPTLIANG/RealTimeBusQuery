@@ -1,3 +1,5 @@
+import { serviceBaseUrl } from '../../Conf/conf.js'
+
 onload = () => {
     document.getElementById("identification").onclick = () => {
         location = `../../Identification/show/show.html?route=${location.search.split("=")[1]}`
@@ -12,7 +14,7 @@ function loadData() {
     var response
     var request = new XMLHttpRequest()
     var method = "GET"
-    var url = `http://122.51.3.35/device.php?route=${route}`
+    var url = `${serviceBaseUrl}/device.php?route=${route}`
     request.onreadystatechange = () => {
         if (request.readyState == 4) {
             if ((request.status >= 200 && request.status < 300) || request.status == 304) {
@@ -88,7 +90,7 @@ function switchStatus(id, status) {
         return
     }
     let data = `id=${id}&status=${status ? 0 : 1}`
-    fetch('http://122.51.3.35/device.php', {
+    fetch(`${serviceBaseUrl}/device.php`, {
         method: 'PUT',
         body: data
     }).then((response) => {
@@ -119,7 +121,7 @@ var del = (id) => {
     }
     var request = new XMLHttpRequest()
     var method = "DELETE"
-    var url = "http://122.51.3.35/device.php"
+    var url = `${serviceBaseUrl}/device.php`
     var content = `id=${id}`
     request.onreadystatechange = () => {
         if (request.readyState == 4) {

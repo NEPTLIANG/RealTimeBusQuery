@@ -1,14 +1,23 @@
+/*
+ * @Author: NeptLiang
+ * @Date: 2020-08-28 14:13:47
+ * @LastEditors: NeptLiang
+ * @LastEditTime: 2021-05-04 14:43:40
+ * @Description: 修改路线信息
+ */
+import { serviceBaseUrl } from '../../Conf/conf.js'
+
 onload = () => {
     getInfo();
     var addBtn = document.getElementById("modify");
-    addBtn.addEventListener("click", function () {
+    addBtn.addEventListener("click", function() {
         var id = document.getElementById("id").value;
         var name = document.getElementById("name").value;
         var org = document.getElementById("org").value;
         var intro = document.getElementById("intro").value;
         intro = (intro.length > 0) ? intro : "暂无说明";
         var content = "id=" + id + "&name=" + name + "&org=" + org + "&intro=" + intro;
-        var url = "http://122.51.3.35/route.php";
+        var url = `${serviceBaseUrl}/route.php`;
         if (typeof "XMLHttpRequest" !== "undefined") {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = () => {
@@ -19,7 +28,7 @@ onload = () => {
                         } catch (e) {
                             alert("没有响应");
                         }
-                        if (typeof (response) !== "undefined") {
+                        if (typeof(response) !== "undefined") {
                             if (response.status === 200) {
                                 alert("设备信息修改成功");
                             } else {

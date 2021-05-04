@@ -100,7 +100,7 @@ let del = id => {
     }
     var request = new XMLHttpRequest()
     var method = "DELETE"
-    var url = "http://122.51.3.35/route.php"
+    var url = `${serviceBaseUrl}/route.php`
     var content = `id=${id}`
     request.onreadystatechange = () => {
         if (request.readyState == 4) {

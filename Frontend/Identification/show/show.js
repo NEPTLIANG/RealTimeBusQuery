@@ -1,3 +1,5 @@
+import { serviceBaseUrl } from '../../Conf/conf.js'
+
 onload = () => {
     document.getElementById("device").onclick = () => {
         location = `../../Device/show/show.html?route=${location.search.split("=")[1]}`
@@ -12,7 +14,7 @@ function loadData() {
     var response
     var request = new XMLHttpRequest()
     var method = "GET"
-    var url = `http://122.51.3.35/identification.php?route=${route}`
+    var url = `${serviceBaseUrl}/identification.php?route=${route}`
     request.onreadystatechange = () => {
         if (request.readyState == 4) {
             if ((request.status >= 200 && request.status < 300) || request.status == 304) {
@@ -80,7 +82,7 @@ var del = (id) => {
     }
     var request = new XMLHttpRequest()
     var method = "DELETE"
-    var url = "http://122.51.3.35/identification.php"
+    var url = `${serviceBaseUrl}/identification.php`
     var content = `id=${id}`
     request.onreadystatechange = () => {
         if (request.readyState == 4) {

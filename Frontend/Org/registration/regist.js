@@ -2,9 +2,10 @@
  * @Author: NeptLiang
  * @Date: 2021-03-05 13:46:26
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-04-09 10:16:51
+ * @LastEditTime: 2021-05-04 14:41:51
  * @Description: 机构注册
  */
+import { serviceBaseUrl } from '../../Conf/conf.js'
 
 /**
  * 基本判空
@@ -31,12 +32,11 @@ function checkout() {
 onload = () => {
     var registBtn = document.getElementById("regist");
     registBtn.addEventListener("click", function() {
-        var url = "http://122.51.3.35/org.php"
+        var url = `${serviceBaseUrl}/org.php`
         let content = checkout();
         if (!content) {
             return;
         }
-        console.log(url)
         if (typeof "XMLHttpRequest" !== "undefined") {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = () => {
@@ -50,8 +50,6 @@ onload = () => {
                         }
                         if (typeof(response) !== "undefined") {
                             if (response.status === 200) {
-                                // location = "../Map/map.html"
-                                console.log("OK")
                                 alert("注册成功")
                                 location = "../login/login.html"
                             } else {

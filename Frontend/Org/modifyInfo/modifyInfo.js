@@ -2,9 +2,11 @@
  * @Author: NeptLiang
  * @Date: 2021-04-01 09:30:59
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-04-02 17:38:06
+ * @LastEditTime: 2021-05-04 14:38:37
  * @Description: 修改信息/密码
  */
+import { serviceBaseUrl } from '../../Conf/conf.js'
+
 //TODO: 注销待完成
 onload = () => {
     let pwdBox = document.getElementById('pwdBox');
@@ -18,7 +20,7 @@ onload = () => {
             alert('机构名不能为空');
             return;
         }
-        if (changePwdCheckBox.checked) {
+        if (changePwdCheckBox.checked) { //修改密码
             if (!document.getElementById("oldPwd").value ||
                 !document.getElementById("newPwd").value ||
                 !document.getElementById("confirmPwd").value) {
@@ -34,7 +36,7 @@ onload = () => {
                 document.getElementById("confirmPwd").value = "";
                 return;
             }
-            var url = "http://122.51.3.35/org.php"
+            var url = `${serviceBaseUrl}/org.php`
             content = `name=${name}&oldPwd=${oldPwd}&newPwd=${newPwd}`;
             if (typeof "XMLHttpRequest" !== "undefined") {
                 var xhr = new XMLHttpRequest();
@@ -51,8 +53,8 @@ onload = () => {
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                 xhr.send(content);
             }
-        } else {
-            fetch('http://122.51.3.35/org.php', {
+        } else { //修改信息
+            fetch(`${serviceBaseUrl}/org.php`, {
                 method: 'PUT',
                 body: `name=${name}`
             }).then(response =>

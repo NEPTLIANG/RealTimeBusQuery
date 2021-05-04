@@ -2,9 +2,11 @@
  * @Author: NeptLiang
  * @Date: 2021-04-01 09:30:59
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-04-02 17:37:19
+ * @LastEditTime: 2021-05-04 14:46:58
  * @Description: 修改信息/密码
  */
+import { serviceBaseUrl } from '../../Conf/conf.js'
+
 //TODO: 注销待完成
 onload = () => {
     let changePwdCheckBox = document.getElementById('changePwd');
@@ -35,7 +37,7 @@ onload = () => {
                 document.getElementById("confirmPwd").value = "";
                 return;
             }
-            var url = "http://122.51.3.35/user.php"
+            var url = `${serviceBaseUrl}/user.php`
             content = `name=${name}&oldPwd=${oldPwd}&newPwd=${newPwd}`;
             if (typeof "XMLHttpRequest" !== "undefined") {
                 var xhr = new XMLHttpRequest();
@@ -53,7 +55,7 @@ onload = () => {
                 xhr.send(content);
             }
         } else {
-            fetch('http://122.51.3.35/user.php', {
+            fetch(`${serviceBaseUrl}/user.php`, {
                 method: 'PUT',
                 body: `name=${name}`
             }).then(response =>
