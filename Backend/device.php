@@ -161,14 +161,15 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $response['message'] = "不合法的值";
                 exit(json_encode($response, JSON_UNESCAPED_UNICODE));
             }
-        } else if (isset($data['id']) && isset($data['name'])
+        } else if (isset($data['oldId']) && isset($data['newId']) && isset($data['name'])
             && isset($data['route']) && isset($data['intro'])) {  //修改信息
-            $id     = trim($data['id']);
+            $oldId  = trim($data['oldId']);
+            $newId  = trim($data['newId']);
             $name   = trim($data['name']);
             $route  = trim($data['route']);
             $intro  = trim($data['intro']);
             $intro  = $intro ? $intro : "暂无说明";
-            if ($name && preg_match($pattern, $id) !== 0
+            if ($name && preg_match($pattern, $oldId) && preg_match($pattern, $newId)
                 && preg_match($pattern, $route) && $intro) {
                 @$db = new mysqli("127.0.0.1", "root", $dbPwd);
                 if (mysqli_connect_errno()) {
@@ -181,7 +182,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     . "SET id=?, name=?, route=?, intro=? "
                     . "WHERE id=?";
                 $stmt = $db->prepare($query);
-                $stmt->bind_param("sssss", $id, $name, $route, $intro, $id);
+                $stmt->bind_param("sssss", $newId, $name, $route, $intro, $oldId);
                 $stmt->execute();
                 if ($stmt->affected_rows > 0) {
                     $response['status'] = 200;

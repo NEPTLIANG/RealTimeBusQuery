@@ -2,21 +2,21 @@
  * @Author: NeptLiang
  * @Date: 2020-08-28 14:13:47
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-05-04 12:58:17
+ * @LastEditTime: 2021-05-13 23:59:08
  * @Description: 修改设备
  */
 import { serviceBaseUrl } from '../../Conf/conf.js'
 
 onload = () => {
-    getInfo();
+    let { oldId } = getInfo();
     var addBtn = document.getElementById("modify");
     addBtn.addEventListener("click", function() {
-        var id = document.getElementById("id").value;
+        var newId = document.getElementById("id").value;
         var name = document.getElementById("name").value;
         var route = document.getElementById("route").value;
         var intro = document.getElementById("intro").value;
         intro = (intro.length > 0) ? intro : "暂无说明";
-        var content = "id=" + id + "&name=" + name + "&route=" + route + "&intro=" + intro;
+        var content = `oldId=${oldId}&newId=${newId}&name=${name}&route=${route}&intro=${intro}`;
         var url = `${serviceBaseUrl}/device.php`;
         if (typeof "XMLHttpRequest" !== "undefined") {
             var xhr = new XMLHttpRequest();
@@ -49,12 +49,19 @@ onload = () => {
     })
 }
 
+/**
+ * 获取旧设备信息
+ * @returns 旧设备信息
+ */
 function getInfo() {
-    console.log(document.location.search.substr(1).split("&"));
     var param = document.location.search.substr(1).split("&");
-    console.log(decodeURIComponent(param[0].substr(param[0].indexOf("=") + 1)))
-    document.getElementById("id").value = param[0].substr(param[0].indexOf("=") + 1);
+    // console.log(decodeURIComponent(param[0].substr(param[0].indexOf("=") + 1)))
+    let oldId = param[0].substr(param[0].indexOf("=") + 1);
+    document.getElementById("id").value = oldId;
     document.getElementById("name").value = decodeURIComponent(param[1].substr(param[1].indexOf("=") + 1));
     document.getElementById("route").value = param[2].substr(param[2].indexOf("=") + 1);
     document.getElementById("intro").value = decodeURIComponent(param[3].substr(param[3].indexOf("=") + 1));
+    return {
+        oldId: oldId
+    };
 }

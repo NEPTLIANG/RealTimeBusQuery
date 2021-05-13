@@ -2,7 +2,7 @@
  * @Author: NeptLiang
  * @Date: 2021-03-05 13:46:26
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-05-13 22:16:02
+ * @LastEditTime: 2021-05-13 22:25:53
  * @Description: 修改标识点
  */
 import { serviceBaseUrl } from '../../Conf/conf.js'
@@ -15,8 +15,8 @@ onload = () => {
         var name = document.getElementById("name").value;
         var route = document.getElementById("route").value;
         var intro = document.getElementById("intro").value;
-        var lng = document.getElementById("lnglat").value.split(",")[0];
-        var lat = document.getElementById("lnglat").value.split(",")[1];
+        var lng = document.getElementById("lnglat").value.split(",")[0]; //经度
+        var lat = document.getElementById("lnglat").value.split(",")[1]; //纬度
         intro = (intro.length > 0) ? intro : "暂无说明";
         var content = `oldId=${oldId}&newId=${newId}&name=${name}&route=${route}` +
             `&intro=${intro}&lng=${lng}&lat=${lat}`;
