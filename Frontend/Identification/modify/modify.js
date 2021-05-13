@@ -2,23 +2,24 @@
  * @Author: NeptLiang
  * @Date: 2021-03-05 13:46:26
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-05-04 14:27:42
+ * @LastEditTime: 2021-05-13 22:16:02
  * @Description: 修改标识点
  */
 import { serviceBaseUrl } from '../../Conf/conf.js'
 
 onload = () => {
-    getInfo();
+    let { oldId } = getInfo();
     var modifyBtn = document.getElementById("modify");
     modifyBtn.addEventListener("click", function() {
-        var id = document.getElementById("id").value;
+        var newId = document.getElementById("id").value;
         var name = document.getElementById("name").value;
         var route = document.getElementById("route").value;
         var intro = document.getElementById("intro").value;
-        // var lng = document.getElementById("lnglat").value.split(",")[0];
-        // var lat = document.getElementById("lnglat").value.split(",")[1];
+        var lng = document.getElementById("lnglat").value.split(",")[0];
+        var lat = document.getElementById("lnglat").value.split(",")[1];
         intro = (intro.length > 0) ? intro : "暂无说明";
-        var content = "id=" + id + "&name=" + name + "&route=" + route + "&intro=" + intro;
+        var content = `oldId=${oldId}&newId=${newId}&name=${name}&route=${route}` +
+            `&intro=${intro}&lng=${lng}&lat=${lat}`;
         var url = `${serviceBaseUrl}/identification.php`;
         if (typeof "XMLHttpRequest" !== "undefined") {
             var xhr = new XMLHttpRequest();
@@ -49,14 +50,22 @@ onload = () => {
     })
 }
 
+/**
+ * 获取旧站点信息
+ * @returns 旧站点信息
+ */
 function getInfo() {
     // console.log(document.location.search.substr(1).split("&"));
     var param = document.location.search.substr(1).split("&");
-    document.getElementById("id").value = param[0].substr(param[0].indexOf("=") + 1);
+    let oldId = param[0].substr(param[0].indexOf("=") + 1)
+    document.getElementById("id").value = oldId;
     document.getElementById("name").value = decodeURIComponent(param[1].substr(param[1].indexOf("=") + 1));
     document.getElementById("route").value = param[2].substr(param[2].indexOf("=") + 1);
     document.getElementById("intro").value = decodeURIComponent(param[5].substr(param[5].indexOf("=") + 1));
     document.getElementById('lnglat').value = decodeURIComponent(param[3].substr(param[3].indexOf('=') + 1)) +
         ", " +
         decodeURIComponent(param[4].substr(param[4].indexOf('=') + 1));
+    return {
+        oldId: oldId
+    };
 }

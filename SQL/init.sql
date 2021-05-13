@@ -31,8 +31,9 @@ ALTER TABLE route
 ALTER TABLE route
     MODIFY name VARCHAR(20) NOT NULL;
 
+-- DROP TRIGGER autoDelIdentificationAndDevice;
 delimiter |
-CREATE TRIGGER autoDel BEFORE DELETE ON route   /* 路线级联删除触发器 */
+CREATE TRIGGER autoDelIdentificationAndDevice BEFORE DELETE ON route   /* 路线级联删除触发器 */
     FOR EACH ROW
     BEGIN
         DELETE FROM identification WHERE route = OLD.id;
