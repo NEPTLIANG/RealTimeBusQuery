@@ -2,7 +2,7 @@
  * @Author: NeptLiang
  * @Date: 2020-08-28 14:13:47
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-05-13 20:18:18
+ * @LastEditTime: 2021-05-14 13:26:28
  * @Description: 修改路线信息
  */
 import { serviceBaseUrl } from '../../Conf/conf.js'
@@ -31,6 +31,7 @@ onload = () => {
                         if (typeof(response) !== "undefined") {
                             if (response.status === 200) {
                                 alert("路线信息修改成功");
+                                history.back();
                             } else {
                                 alert(response.message);
                             }

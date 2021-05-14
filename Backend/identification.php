@@ -15,7 +15,7 @@ function authentification() {
     }
 }
 
-$pattern = "/[a-zA-Z0-9_-]{2,21}/";
+$pattern = "/[a-zA-Z0-9_-]{1,21}/";
 switch ($_SERVER['REQUEST_METHOD']) {
     case "POST":
         authentification();

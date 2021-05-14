@@ -144,7 +144,7 @@ function handleIdentifications(response) {
         } else {
             points[identification.id].setPosition(new AMap.LngLat(identification.lng, identification.lat));
         }
-        // map.setFitView(point);
+        map.setFitView(points);
     }
 }
 

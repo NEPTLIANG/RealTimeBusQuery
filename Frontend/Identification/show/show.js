@@ -22,6 +22,7 @@ function loadData() {
                     response = JSON.parse(request.responseText)
                 } catch (e) {}
                 if (response) {
+                    document.getElementById('list').innerHTML = ''
                     if (response.status == 200) {
                         if (!response.identifications.length) {
                             var prompt = document.createElement("div")
@@ -29,7 +30,7 @@ function loadData() {
                             prompt.innerHTML = "<h2>暂无标识点</h2>"
                             document.getElementById("list").appendChild(prompt)
                             console.log(prompt)
-                            alert(response.message)
+                                // alert(response.message)
                         } else {
                             document.getElementById("list").innerHTML = ""
                             var identifications = response.identifications
@@ -39,7 +40,7 @@ function loadData() {
                             }
                         }
                     } else {
-                        alert(response.message)
+                        // alert(response.message)
                         var prompt = document.createElement("div")
                         prompt.className = "card"
                         prompt.innerHTML = "<h2>暂未查询到标识点</h2>"
@@ -74,6 +75,7 @@ function show(item) {
         <a href='../modify/modify.html?id=${item.id}&name=${item.name}&route=${item.route}&lng=${item.lng}&lat=${item.lat}&intro=${item.intro}' class="cardButton">编辑</a>
         <button onclick="del('${item.id}')" class="cardOption">删除</button>`
     document.getElementById("list").appendChild(card)
+    document.getElementById(`del_${item.id}`).addEventListener('click', () => del(item.id))
 }
 
 var del = (id) => {
@@ -87,11 +89,12 @@ var del = (id) => {
     request.onreadystatechange = () => {
         if (request.readyState == 4) {
             if ((request.status >= 200 && request.status < 300) || request.status == 304) {
+                let response = {}
                 try {
                     console.log(request.responseText)
                     response = JSON.parse(request.responseText);
                 } catch (e) {}
-                if (typeof(response) !== "undefined") {
+                if (response !== {}) {
                     if (response.status == 200) {
                         alert("删除成功")
                         loadData()

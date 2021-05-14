@@ -88,7 +88,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 exit(json_encode($result, JSON_UNESCAPED_UNICODE));
             }
             $db->select_db("RealTimeBusQuery");
-            $query = "INSERT INTO device VALUES (?, ?, ?, 0, 0, ?, 0x00)";
+            $query = "INSERT INTO device(id, name, route, lng, lat, intro, status)"
+                . "VALUES(?, ?, ?, 0, 0, ?, 0x00)";
             $stmt = $db->prepare($query);
             if (!$stmt) {
                 // exit(var_dump($db->error_list[0]['error']));
@@ -131,6 +132,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $pattern = "/^[a-zA-Z0-9_\-]{1,20}$/";
         parse_str(file_get_contents('php://input'), $data);
         if (isset($data["id"]) && isset($data["lng"]) && isset($data["lat"])) {  //上传定位
+            // curl -X 'PUT' neptliang.site/device.php -d 'id=car1&lng=110.347807&lat=21.269339'
+            // curl -X 'PUT' neptliang.site/device.php -d 'id=car1&lng=110.352192&lat=21.272446'
             $id = trim($data["id"]);
             $lng = doubleval(trim($data["lng"]));  //经度
             $lat = doubleval(trim($data["lat"]));  //纬度

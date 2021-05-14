@@ -114,25 +114,25 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $stmt->bind_result($id, $name, $ort, $intro);
                 $stmt->execute();
                 $stmt->store_result();
-                if ($stmt->num_rows > 0) {
-                    $routes = [];
-                    while ($stmt->fetch()) {
-                        $route = [
-                            "id" => $id,
-                            "name" => $name,
-                            "org" => $org,
-                            "intro" => $intro
-                        ];
-                        array_push($routes, json_encode($route, JSON_UNESCAPED_UNICODE));
-                    }
-                    $db->close();
-                    $result["status"] = 200;
-                    $result["describe"] = "OK";
-                    $result["routes"] = $routes;
-                } else {
-                    $result["status"] = 500;
-                    $result["message"] = "发生错误，无法查询路线";
+                // if ($stmt->num_rows > 0) {
+                $routes = [];
+                while ($stmt->fetch()) {
+                    $route = [
+                        "id" => $id,
+                        "name" => $name,
+                        "org" => $org,
+                        "intro" => $intro
+                    ];
+                    array_push($routes, json_encode($route, JSON_UNESCAPED_UNICODE));
                 }
+                $db->close();
+                $result["status"] = 200;
+                $result["describe"] = "OK";
+                $result["routes"] = $routes;
+                // } else {
+                //     $result["status"] = 500;
+                //     $result["message"] = "发生错误，无法查询路线";
+                // }
             } else {
                 $result["status"] = 400;
                 $result["message"] = "不合法的值";

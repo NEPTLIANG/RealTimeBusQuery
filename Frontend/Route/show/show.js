@@ -13,6 +13,7 @@ onload = () => {
  * 获取路线信息
  */
 function loadData() {
+    document.getElementById("list").innerHTML = '';
     var org = location.search.split("=")[1]
     console.log(org)
     var response
@@ -45,7 +46,7 @@ function loadData() {
                         alert(response.message)
                         var prompt = document.createElement("div")
                         prompt.className = "card"
-                        prompt.innerHTML = "<h2>暂未查询到路线</h2>"
+                        prompt.innerHTML = `<h2>${reponse.status}：暂未查询到路线</h2>`
                         document.getElementById("list").appendChild(prompt)
                         console.log(prompt)
                     }
@@ -105,13 +106,14 @@ let del = id => {
     request.onreadystatechange = () => {
         if (request.readyState == 4) {
             if ((request.status >= 200 && request.status < 300) || request.status == 304) {
+                let response = {}
                 try {
                     console.log(request.responseText)
                     response = JSON.parse(request.responseText);
                 } catch (e) {
                     alert("响应格式错误，请稍后重试")
                 }
-                if (typeof(response) !== {}) {
+                if (response !== {}) {
                     if (response.status == 200) {
                         alert("删除成功")
                         loadData()

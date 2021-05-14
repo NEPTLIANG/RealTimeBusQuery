@@ -2,7 +2,7 @@
  * @Author: NeptLiang
  * @Date: 2020-08-28 14:13:47
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-05-04 12:56:14
+ * @LastEditTime: 2021-05-14 13:36:57
  * @Description: 添加设备
  */
 import { serviceBaseUrl } from '../../Conf/conf.js'
@@ -29,7 +29,7 @@ onload = () => {
                             alert("没有响应");
                         }
                         if (typeof(response) !== "undefined") {
-                            alert("设备添加成功");
+                            alert(response.message);
                         }
                     } else {
                         alert("请求失败");
