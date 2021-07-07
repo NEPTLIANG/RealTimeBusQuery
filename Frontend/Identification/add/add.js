@@ -1,6 +1,15 @@
+/*
+ * @Author: NeptLiang
+ * @Date: 2020-08-28 14:13:47
+ * @LastEditors: NeptLiang
+ * @LastEditTime: 2021-05-04 13:02:54
+ * @Description: 添加站点
+ */
+import { serviceBaseUrl } from '../../Conf/conf.js'
+
 onload = () => {
     var addBtn = document.getElementById("add");
-    addBtn.addEventListener("click", function () {
+    addBtn.addEventListener("click", function() {
         var id = document.getElementById("id").value;
         var name = document.getElementById("name").value;
         var route = document.getElementById("route").value;
@@ -8,10 +17,10 @@ onload = () => {
         var lng = document.getElementById("lnglat").value.split(",")[0];
         var lat = document.getElementById("lnglat").value.split(",")[1];
         intro = intro.length ? intro : "暂无说明";
-        var content = "id=" + id + "&name=" + name + "&route=" + route
-             + "&lng=" + lng + "&lat=" + lat + "&intro=" + intro;
+        var content = "id=" + id + "&name=" + name + "&route=" + route +
+            "&lng=" + lng + "&lat=" + lat + "&intro=" + intro;
         console.log(content);
-        var url = "http://122.51.3.35/identification.php";
+        var url = `${serviceBaseUrl}/identification.php`;
         if (typeof "XMLHttpRequest" !== "undefined") {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = () => {
@@ -23,7 +32,7 @@ onload = () => {
                         } catch (e) {
                             alert("没有响应");
                         }
-                        if (typeof (response) !== "undefined") {
+                        if (typeof(response) !== "undefined") {
                             if (response.status === 200) {
                                 alert("标识点添加成功");
                             } else {

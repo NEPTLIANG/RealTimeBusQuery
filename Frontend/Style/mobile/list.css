@@ -1,0 +1,105 @@
+@import url('common.css');
+h1 {
+    margin: 1rem 0;
+}
+
+.action {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.actionButton {
+    flex: none;
+    display: inline-block;
+    text-decoration: none;
+    font-size: 16px;
+    /* line-height: 2.5rem; */
+    margin: 0.5rem 0.5rem;
+    padding: 1rem 2rem;
+    border-radius: 4rem;
+}
+
+.mainButton {
+    color: #eee;
+    /* height: 2.5rem; */
+    background-color: #777;
+    border: 4px #777 solid;
+}
+
+.l2Button {
+    color: #777;
+    background: none;
+    border: 4px #777 solid;
+}
+
+article {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    /* padding: 2rem; */
+    /* flex: 0 1 32rem; */
+    /* align-items: flex-end; */
+}
+
+#list {
+    display: flex;
+    align-items: stretch;
+    padding: 0 2rem;
+}
+
+.card {
+    /* background-color: #ddd; */
+    flex: 0 0 8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: center;
+    /* height: 24rem; */
+    margin: 32px 16px;
+    padding: 2rem 4rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(191, 191, 191, 0.5);
+}
+
+.id {
+    margin: 0.5rem 0 1rem 0;
+    font-size: 0.8rem;
+}
+
+.position {
+    color: #bbb;
+    font-size: 0.8rem;
+    line-height: 1.5rem;
+    margin: 1rem 0;
+}
+
+.edit,
+.switch {
+    display: block;
+    /* height: 32px; */
+}
+
+.cardOption {
+    font-size: 0.8rem;
+    width: 100%;
+    color: #bbb;
+    border: none;
+    /* padding: 16px 0; */
+    margin: 0.1rem;
+}
+
+.cardButton {
+    height: 64px;
+    width: 64px;
+    font-size: 0.8rem;
+    line-height: 64px;
+    color: #eee;
+    text-decoration: none;
+    background-color: #777;
+    margin: 1rem auto 0 auto;
+    padding: 0;
+    /* margin: 1rem auto; */
+    border: none;
+    border-radius: 64px;
+}

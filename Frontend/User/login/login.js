@@ -2,15 +2,21 @@
  * @Author: NeptLiang
  * @Date: 2021-03-05 13:46:26
  * @LastEditors: NeptLiang
- * @LastEditTime: 2021-03-31 11:49:56
+ * @LastEditTime: 2021-05-03 01:49:45
  * @Description: 用户登录
  */
+import { serviceBaseUrl } from '../../Conf/conf.js'
+
 onload = () => {
     var addBtn = document.getElementById("add");
     addBtn.addEventListener("click", function() {
         var id = document.getElementById("id").value;
         var pwd = CryptoJS.SHA512(document.getElementById("pwd").value).toString();
-        var url = "http://122.51.3.35/user.php?" + "id=" + id + "&pwd=" + pwd;
+        if (!id || !document.getElementById("pwd").value) {
+            alert('请填写ID、密码');
+            return;
+        }
+        var url = `${serviceBaseUrl}/user.php?id=${id}&pwd=${pwd}`;
         if (typeof "XMLHttpRequest" !== "undefined") {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = () => {
@@ -24,6 +30,7 @@ onload = () => {
                         }
                         if (typeof(response) !== "undefined") {
                             if (response.status === 200) {
+                                localStorage.setItem('user', id);
                                 location = `../../Map/map.html?id=${id}`
                             } else {
                                 alert(response.message);
