@@ -1,3 +1,5 @@
+import { serviceBaseUrl } from '../Conf/conf.js'
+
 var map = {};
 var userId = location.search.split("=")[1];
 var routeId = "";
@@ -49,7 +51,7 @@ function mapInit() {
  * 获取路线
  */
 function getRoute() {
-    var url = `http://122.51.3.35/user.php?id=${userId}`; //获取路线
+    var url = `${serviceBaseUrl}/user.php?id=${userId}`; //获取路线
     if (typeof XMLHttpRequest != "undefined") {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = () => {
@@ -62,6 +64,9 @@ function getRoute() {
                     } else if (response.status === 200 && response.routes.length === 0) {
                         alert("没有查询到路线");
                     } else {
+                        // if (response.status === 403) {
+                        //     history.back();
+                        // }
                         alert("发生错误：" + response.message);
                         throw new SyntaxError("发生错误：" + response.message);
                     }
@@ -79,7 +84,7 @@ function getRoute() {
  * 获取标识点
  */
 function getIdentifications() {
-    var url = `http://122.51.3.35/identification.php?route=${routeId}`; //获取标识点
+    var url = `${serviceBaseUrl}/identification.php?route=${routeId}`; //获取标识点
     if (typeof XMLHttpRequest != "undefined") {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = () => {
@@ -139,15 +144,15 @@ function handleIdentifications(response) {
         } else {
             points[identification.id].setPosition(new AMap.LngLat(identification.lng, identification.lat));
         }
-        // map.setFitView(point);
+        map.setFitView(points);
     }
 }
 
 /**
- * 获取车辆和标记点
+ * 获取车辆
  */
 function getCars() {
-    var url = `http://122.51.3.35/device.php?route=${routeId}`; //获取车辆
+    var url = `${serviceBaseUrl}/device.php?route=${routeId}`;
     if (typeof XMLHttpRequest != "undefined") {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = () => {

@@ -1,3 +1,10 @@
+<!--
+ * @Author: NeptLiang
+ * @Date: 2021-03-05 13:46:26
+ * @LastEditors: NeptLiang
+ * @LastEditTime: 2021-04-12 10:57:05
+ * @Description: 路线列表
+-->
 <!DOCTYPE html>
 <html>
 
@@ -6,8 +13,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0,
             minimun-scale=1.0, maximun-scale=1.0, user-scalable=no" />
-    <script src="show.js"></script>
-    <link href="../../Style/common.css" rel="stylesheet" />
+    <script type="module" src="show.js"></script>
+    <link href="../../Style/desktop/list.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -16,8 +23,10 @@
         <header>
             <h1>路线管理</h1>
             <div class="action">
-                <button id="refresh">刷新</button>
-                <a href="../add/add.html" id="add">添加路线</a>
+                <button id="refresh" class="actionButton l2Button">刷新</button>
+                <button id="logout" class="actionButton l2Button">注销登录</button>
+                <a href="../../Org/modifyInfo/modifyInfo.html" class="actionButton l2Button">修改机构信息/密码</a>
+                <a href="../add/add.html" id="add" class="actionButton mainButton">添加路线</a>
             </div>
         </header>
         <article>

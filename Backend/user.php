@@ -2,6 +2,7 @@
 session_start();
 include('conf/conf.php');
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+header("Access-Control-Allow-Origin: http://neptliang.site");
 // header("Access-Control-Allow-Origin: *");   //线上环境记得关闭跨域
 // if (isset($_SERVER['HTTP_ORIGIN'])) {
 //     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
@@ -42,7 +43,7 @@ function getPwd($id) {
     if ($stmt->num_rows !== 1) {
         $db->close();
         $response["status"] = 500;
-        $response["message"] = "发生错误，无法查询";
+        $response["message"] = "发生错误，无法查询到该用户";
         exit(json_encode($response, JSON_UNESCAPED_UNICODE));
     }
     $stmt->fetch();
@@ -87,13 +88,14 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case "PUT":
         authentification();
         parse_str(file_get_contents('php://input'), $put);
-        if (isset($id['route'])) {      //用户添加路线
+        if (isset($put['route'])) {      //用户添加路线
             $id = trim($_SESSION['valid_user']);
             $route = trim($put["route"]);
             if ((/* !preg_match($pattern, $id) !== 0) &&  */
-                !preg_match($pattern, $route) !== 0)) {
+                !(preg_match($pattern, $route) !== 0))) {   //此处取反前应有括号
                 $response["status"] = 400;
                 $response["message"] = "不合法的值";
+                exit(json_encode($response, JSON_UNESCAPED_UNICODE));
             }
             @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
@@ -102,8 +104,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 exit(json_encode($response, JSON_UNESCAPED_UNICODE));
             }
             $db->select_db("RealTimeBusQuery");
-            $query = "UPDATE user "
-                . "SET route=? "
+            $query = "UPDATE user " 
+                . "SET route=? " 
                 . "WHERE id=?";
             $stmt = $db->prepare($query);
             $stmt->bind_param("ss", $route, $id);

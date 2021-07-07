@@ -64,11 +64,15 @@ function authentification() {
 switch ($_SERVER['REQUEST_METHOD']) {
     case "POST" :
         authentification();
-        $name = trim($_POST['name']);
-        $id = trim($_POST['id']);
-        $route = trim($_POST['route']);
-        $intro = trim($_POST['intro']);
-        $intro = isset($intro) ? $intro : "暂无说明";
+        if (!isset($_POST['name']) || !isset($_POST['id']) || !isset($_POST['route'])) {
+            $result['status'] = 400;
+            $result['message'] = '参数缺失';
+            exit(json_encode($result, JSON_UNESCAPED_UNICODE));
+        }
+        $name   = trim($_POST['name']);
+        $id     = trim($_POST['id']);
+        $route  = trim($_POST['route']);
+        $intro = (isset($_POST['intro']) && trim($_POST['intro'])) ? trim($_POST['intro']) : "暂无说明";
         if (isset($name) && isset($id) && isset($route)) {
             $dev = new Device($name, $id, $route);
         } else {
@@ -84,8 +88,16 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 exit(json_encode($result, JSON_UNESCAPED_UNICODE));
             }
             $db->select_db("RealTimeBusQuery");
-            $query = "INSERT INTO device VALUES (?, ?, ?, 0, 0, ?)";
+            $query = "INSERT INTO device(id, name, route, lng, lat, intro, status)"
+                . "VALUES(?, ?, ?, 0, 0, ?, 0x00)";
             $stmt = $db->prepare($query);
+            if (!$stmt) {
+                // exit(var_dump($db->error_list[0]['error']));
+                // $errMsg = json_encode($db->error_list);
+                $result['status'] = 500;
+                $result['message'] = "设备添加失败，查询出错：{$db->error_list[0]['error']}";
+                exit(json_encode($result, JSON_UNESCAPED_UNICODE));
+            }
             $stmt->bind_param("ssss", $id, $name, $route, $intro);
             $stmt->execute();
             if ($stmt->affected_rows > 0) {
@@ -120,6 +132,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $pattern = "/^[a-zA-Z0-9_\-]{1,20}$/";
         parse_str(file_get_contents('php://input'), $data);
         if (isset($data["id"]) && isset($data["lng"]) && isset($data["lat"])) {  //上传定位
+            // curl -X 'PUT' neptliang.site/device.php -d 'id=car1&lng=110.347807&lat=21.269339'
+            // curl -X 'PUT' neptliang.site/device.php -d 'id=car1&lng=110.352192&lat=21.272446'
             $id = trim($data["id"]);
             $lng = doubleval(trim($data["lng"]));  //经度
             $lat = doubleval(trim($data["lat"]));  //纬度
@@ -150,14 +164,15 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $response['message'] = "不合法的值";
                 exit(json_encode($response, JSON_UNESCAPED_UNICODE));
             }
-        } else if (isset($data['id']) && isset($data['name'])
+        } else if (isset($data['oldId']) && isset($data['newId']) && isset($data['name'])
             && isset($data['route']) && isset($data['intro'])) {  //修改信息
-            $id     = trim($data['id']);
+            $oldId  = trim($data['oldId']);
+            $newId  = trim($data['newId']);
             $name   = trim($data['name']);
             $route  = trim($data['route']);
             $intro  = trim($data['intro']);
             $intro  = $intro ? $intro : "暂无说明";
-            if ($name && preg_match($pattern, $id) !== 0
+            if ($name && preg_match($pattern, $oldId) && preg_match($pattern, $newId)
                 && preg_match($pattern, $route) && $intro) {
                 @$db = new mysqli("127.0.0.1", "root", $dbPwd);
                 if (mysqli_connect_errno()) {
@@ -170,7 +185,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     . "SET id=?, name=?, route=?, intro=? "
                     . "WHERE id=?";
                 $stmt = $db->prepare($query);
-                $stmt->bind_param("sssss", $id, $name, $route, $intro, $id);
+                $stmt->bind_param("sssss", $newId, $name, $route, $intro, $oldId);
                 $stmt->execute();
                 if ($stmt->affected_rows > 0) {
                     $response['status'] = 200;

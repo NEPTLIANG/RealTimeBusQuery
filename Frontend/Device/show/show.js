@@ -1,3 +1,5 @@
+import { serviceBaseUrl } from '../../Conf/conf.js'
+
 onload = () => {
     document.getElementById("identification").onclick = () => {
         location = `../../Identification/show/show.html?route=${location.search.split("=")[1]}`
@@ -12,7 +14,7 @@ function loadData() {
     var response
     var request = new XMLHttpRequest()
     var method = "GET"
-    var url = `http://122.51.3.35/device.php?route=${route}`
+    var url = `${serviceBaseUrl}/device.php?route=${route}`
     request.onreadystatechange = () => {
         if (request.readyState == 4) {
             if ((request.status >= 200 && request.status < 300) || request.status == 304) {
@@ -20,21 +22,21 @@ function loadData() {
                     response = JSON.parse(request.responseText);
                 } catch (e) {}
                 if (response) {
-                    if (response.status == 200) {
+                    document.getElementById('list').innerHTML = ''
+                    if (response.status === 200) {
                         if (!response.devices.length) {
                             var prompt = document.createElement("div")
                             prompt.className = "card"
                             prompt.innerHTML = "<h2>暂未查询到车辆</h2>"
                             document.getElementById("list").appendChild(prompt)
                         } else {
-                            document.getElementById("list").innerHTML = ""
                             var devices = response.devices
                             for (var index in devices) {
                                 show(JSON.parse(devices[index]))
                             }
                         }
                     } else {
-                        alert(response.describe)
+                        // alert(response.describe)
                         var prompt = document.createElement("div")
                         prompt.className = "card"
                         prompt.innerHTML = "<h2>暂未查询到车辆</h2>"
@@ -67,17 +69,21 @@ function show(item) {
             ${status ? position : '设备已禁用'}
         </div>
         <div>${intro}</div>
-        <button onclick="switchStatus('${item.id}', '${status}')" class="cardButton" 
+        <button onclick="switchStatus('${item.id}', '${status}')" id="switch_${item.id}" class="cardButton" 
             style="background-color: ${status ? '#f77' : '#777'};
             color: ${status? '#fff' : '#eee'};
             line-height: 1.25em;
         ">
             ${status? '点击<br/>停用' : '点击<br/>启用'}
         </button>
-        <a href='../modify/modify.html?id=${item.id}&name=${item.name}&route=${item.route}&intro=${item.intro}' class="cardOption">编辑</a>
-        <button onclick="del('${item.id}')" class="cardOption">删除</button>
+        <div class="optionDiv">
+            <a href='../modify/modify.html?id=${item.id}&name=${item.name}&route=${item.route}&intro=${item.intro}' class="cardOption">编辑</a>
+            <button id="del_${item.id}" class="cardOption">删除</button>
+        </div>
     `
     document.getElementById("list").appendChild(card)
+    document.getElementById(`switch_${item.id}`).addEventListener('click', () => switchStatus(item.id, status))
+    document.getElementById(`del_${item.id}`).addEventListener('click', () => del(item.id))
 }
 
 function switchStatus(id, status) {
@@ -86,7 +92,7 @@ function switchStatus(id, status) {
         return
     }
     let data = `id=${id}&status=${status ? 0 : 1}`
-    fetch('http://122.51.3.35/device.php', {
+    fetch(`${serviceBaseUrl}/device.php`, {
         method: 'PUT',
         body: data
     }).then((response) => {
@@ -117,11 +123,12 @@ var del = (id) => {
     }
     var request = new XMLHttpRequest()
     var method = "DELETE"
-    var url = "http://122.51.3.35/device.php"
+    var url = `${serviceBaseUrl}/device.php`
     var content = `id=${id}`
     request.onreadystatechange = () => {
         if (request.readyState == 4) {
             if ((request.status >= 200 && request.status < 300) || request.status == 304) {
+                let response = {}
                 try {
                     response = JSON.parse(request.responseText);
                 } catch (e) {}

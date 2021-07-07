@@ -1,13 +1,15 @@
-@import url('../../Style/desktop/form.css');
-html,
-body {
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
     overflow: auto;
     height: 100%;
-    width: 100%;
     /* font-size: 48px; */
     display: flex;
     justify-content: center;
-    align-items: flex-end;
+    align-items: center;
     background-color: #eee;
 }
 
@@ -15,17 +17,19 @@ body {
 /* @media screen and (min-width : 1366px) { */
 
 html {
-    align-items: center;
+    font-size: 16px;
 }
 
 
 /* } */
 
-.body {
+body {
     overflow: auto;
-    padding: 2rem 1rem;
+    color: #777;
+    padding: 8rem 2rem;
 }
 
 h1 {
-    margin: 2rem 0;
+    font-size: 2.5rem;
+    margin: 4rem 0;
 }

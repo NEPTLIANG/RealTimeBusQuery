@@ -19,18 +19,22 @@ $pattern = "/^[a-zA-Z0-9_\-]{1,20}$/";
 switch ($_SERVER['REQUEST_METHOD']) {
     case "POST" :
         authentification();
+        if (!isset($_POST['name']) || !isset($_POST['id']) || !isset($_POST['org'])) {
+            $result['status'] = 400;
+            $result['message'] = '参数缺失';
+            exit(json_encode($result, JSON_UNESCAPED_UNICODE));
+        }
         $name = trim($_POST['name']);
         $id = trim($_POST['id']);
         $org = trim($_POST['org']);
-        $intro = trim($_POST['intro']);
-        $intro = isset($intro) ? $intro : "暂无说明";
+        $intro = (isset($_POST['intro']) && trim($_POST['intro'])) ? trim($_POST['intro']) : "暂无说明";
         if ((preg_match($pattern, $id) !== 0) && (preg_match($pattern, $org) !== 0) && isset($name)) {
             //var_dump(isset($dev));
             @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
                 $result["status"] = 500;
                 $result["message"] = "无法连接到数据库，请稍后重试";
-                exit(json_encode($result));
+                exit(json_encode($result, JSON_UNESCAPED_UNICODE));
             }
             $db->select_db("RealTimeBusQuery");
             $query = "INSERT INTO route VALUES (?, ?, ?, ?)";
@@ -50,16 +54,23 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $result["status"] = 400;
             $result["message"] = "不合法的值";
         }
-        exit(json_encode($result));
+        exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         break;
     case "PUT":
         authentification();
         parse_str(file_get_contents('php://input'), $data);
-        $id = trim($data["id"]);
+        if (!isset($data['name']) || !isset($data['oldId']) || !isset($data['newId']) || !isset($data['org'])) {
+            $result['status'] = 400;
+            $result['message'] = '参数缺失';
+            exit(json_encode($result, JSON_UNESCAPED_UNICODE));
+        }
+        $oldId = trim($data["oldId"]);
+        $newId = trim($data['newId']);
         $name = trim($data["name"]);
         $org = trim($data["org"]);
-        $intro = trim($data["intro"]);
-        if ((preg_match($pattern, $id) !== 0) && (preg_match($pattern, $org) !== 0) && isset($name)) {
+        $intro = (isset($data['intro']) && trim($data['intro'])) ? trim($data['intro']) : "暂无说明";
+        if ((preg_match($pattern, $oldId) !== 0) && preg_match($pattern, $newId)
+            && (preg_match($pattern, $org) !== 0) && isset($name)) {
             @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
                 exit("无法连接到数据库，请稍后重试");
@@ -69,7 +80,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 . "SET id=?, name=?, org=?, intro=? "
                 . "WHERE id=?";
             $stmt = $db->prepare($query);
-            $stmt->bind_param("sssss", $id, $name, $org, $intro, $id);
+            $stmt->bind_param("sssss", $newId, $name, $org, $intro, $oldId);
             $stmt->execute();
             if ($stmt->affected_rows > 0) {
                 $result["status"] = 200;
@@ -84,7 +95,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $result["status"] = 400;
             $result["message"] = "不合法的值";
         }
-        exit(json_encode($result));
+        exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         break;
     case "GET":
         if (isset($_GET["org"])) {
@@ -103,30 +114,30 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $stmt->bind_result($id, $name, $ort, $intro);
                 $stmt->execute();
                 $stmt->store_result();
-                if ($stmt->num_rows > 0) {
-                    $routes = [];
-                    while ($stmt->fetch()) {
-                        $route = [
-                            "id" => $id,
-                            "name" => $name,
-                            "org" => $org,
-                            "intro" => $intro
-                        ];
-                        array_push($routes, json_encode($route));
-                    }
-                    $db->close();
-                    $result["status"] = 200;
-                    $result["describe"] = "OK";
-                    $result["routes"] = $routes;
-                } else {
-                    $result["status"] = 500;
-                    $result["message"] = "发生错误，无法查询路线";
+                // if ($stmt->num_rows > 0) {
+                $routes = [];
+                while ($stmt->fetch()) {
+                    $route = [
+                        "id" => $id,
+                        "name" => $name,
+                        "org" => $org,
+                        "intro" => $intro
+                    ];
+                    array_push($routes, json_encode($route, JSON_UNESCAPED_UNICODE));
                 }
+                $db->close();
+                $result["status"] = 200;
+                $result["describe"] = "OK";
+                $result["routes"] = $routes;
+                // } else {
+                //     $result["status"] = 500;
+                //     $result["message"] = "发生错误，无法查询路线";
+                // }
             } else {
                 $result["status"] = 400;
                 $result["message"] = "不合法的值";
             }
-            exit(json_encode($result));
+            exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         } else {
             @$db = new mysqli("127.0.0.1", "root", "amd,yes!");
             if (mysqli_connect_errno()) {
@@ -136,7 +147,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $query = "SELECT id, name, org, intro "
                 . "FROM route";
             $stmt = $db->prepare($query);
-            $stmt->bind_result($id, $name, $ort, $intro);
+            $stmt->bind_result($id, $name, $org, $intro);
             $stmt->execute();
             $stmt->store_result();
             if ($stmt->num_rows > 0) {
@@ -148,7 +159,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                         "org" => $org,
                         "intro" => $intro
                     ];
-                    array_push($routes, json_encode($route));
+                    array_push($routes, json_encode($route, JSON_UNESCAPED_UNICODE));
                 }
                 $db->close();
                 $result["status"] = 200;
@@ -158,7 +169,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $result["status"] = 500;
                 $result["message"] = "暂无路线";
             }
-            exit(json_encode($result));
+            exit(json_encode($result, JSON_UNESCAPED_UNICODE));
         }
         break;
     case "DELETE":
@@ -182,12 +193,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $stmt = $db->prepare($query);
         $stmt->bind_param("s", $id);
         $stmt->execute();
-        if ($stmt->affected_rows) {
+        if ($stmt->affected_rows >= 1) {
             $response['status'] = 200;
             $response['describe'] = "OK";
+            // $response['describe'] = $stmt->affected_rows;
         } else {
             $response['status'] = 500;
-            $response['message'] = "发生错误，路线未删除";
+            $response['message'] = "{$stmt->affected_rows}：发生错误，路线未删除";
         }
         $db->close();
         exit(json_encode($response, JSON_UNESCAPED_UNICODE));

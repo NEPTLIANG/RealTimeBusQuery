@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('conf/conf.php');
-// header("Access-Control-Allow-Origin: *");   //线上环境记得关闭跨域
+header("Access-Control-Allow-Origin: *");   //线上环境记得关闭跨域
 
 /**
  * 鉴权
@@ -34,7 +34,7 @@ function getPwd($id) {
     if ($stmt->num_rows !== 1) {
         $db->close();
         $response["status"] = 500;
-        $response["message"] = "发生错误，无法查询";
+        $response["message"] = "发生错误，无法查询到该机构";
         exit(json_encode($response, JSON_UNESCAPED_UNICODE));
     }
     $stmt->fetch();
@@ -44,12 +44,13 @@ function getPwd($id) {
 
 $pattern = "/^[a-zA-Z0-9_\-]{1,20}$/";
 $pwdPattern = "/^[a-fA-F0-9]{128}$/";
+$nullStrHash = 'cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e';
 switch ($_SERVER['REQUEST_METHOD']) {
     case "POST" :
         $name = trim($_POST['name']);
         $id = trim($_POST['id']);
         $pwd = trim($_POST['pwd']);
-        if ((preg_match($pattern, $id) !== 0) && isset($pwd) && isset($name)) {
+        if ((preg_match($pattern, $id) !== 0) && $name && ($pwd !== $nullStrHash)) {
             //var_dump(isset($dev));
             @$db = new mysqli("127.0.0.1", "root", $dbPwd);
             if (mysqli_connect_errno()) {
@@ -188,7 +189,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $_SESSION['valid_org'] = $id;
             } else {
                 $result["status"] = 500;
-                $result["message"] = "发生错误，无法查询机构信息";
+                $result["message"] = "发生错误，无法查询到该机构";
             }
             $db->close();
         } else {
